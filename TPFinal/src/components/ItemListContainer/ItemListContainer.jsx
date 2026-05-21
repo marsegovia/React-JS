@@ -1,4 +1,4 @@
-import { ItemList } from "../ItemList/Itemlist";
+import { ItemList } from "../ItemList/ItemList";
 import styles from './ItemListContainer.module.css';
 import productosJson from "../../../public/Data/productos.json";
 import Icono from "../../assets/icono.png"

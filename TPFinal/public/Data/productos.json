@@ -6,7 +6,8 @@
             "formato": "LP",
             "precio": 82000,
             "stock": 2,
-            "imagen": "./public/Images/mortif.jpg"
+            "imagen": "./public/Images/mortif.jpg",
+            "categoria": ""
         },
         {
             "id": 2,
