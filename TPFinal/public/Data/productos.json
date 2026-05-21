@@ -6,7 +6,7 @@
             "formato": "LP",
             "precio": 82000,
             "stock": 2,
-            "imagen": "./public/Images/mortif.jpg",
+            "imagen": "./src/assets/mortif.jpg",
             "categoria": ""
         },
         {
@@ -16,7 +16,7 @@
             "formato": "2LP",
             "precio": 88000,
             "stock": 2,
-            "imagen": "./public/Images/2013.jpg",
+            "imagen": "./src/assets/2013.jpg",
             "categoria": "Destacado"
         }
 
