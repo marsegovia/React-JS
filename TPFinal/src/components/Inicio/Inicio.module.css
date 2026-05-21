@@ -1,0 +1,59 @@
+.BannerContainer img{
+    width: 100%;
+    cursor:default;
+}
+
+.Presentacion{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+.Presentacion h3{
+    color: white;
+    position: absolute;
+    margin-top: -450px;
+    margin-left: 30px;
+}
+
+.Presentacion h1{
+    color: white;
+    position: absolute;
+    margin-top: -400px;
+    margin-left: 30px;
+}
+
+.Presentacion p{
+    color: white;
+    position: absolute;
+    margin-top: -350px;
+    margin-left: 30px;
+}
+
+.BotonInicial{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    margin-top: -100px;
+    margin-left: 40.5%;
+}
+
+.BotonInicial button{
+    background-color: transparent;
+    border: 1px solid #6d4ba3;
+    height: 35px;
+    width: 250px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.BotonInicial button:hover{
+    background-color: #6d4ba3;
+    color: white;
+}
+
+.IconoTitulo{
+    display: flex;
+    flex-direction: row;
+}

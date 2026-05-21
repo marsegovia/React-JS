@@ -1,0 +1,110 @@
+.Card{
+    display: flex;
+    flex-direction: column;  
+    color: white;
+    height: 450px;
+    flex-wrap: wrap;
+    width: 226px;
+    border-radius: 10px; /* Opcional, para suavizar las esquinas */
+    background-color: #111; /* O el color de fondo oscuro de tu tema */
+    border: 0.5px solid  rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 0 10px rgba(0, 0, 0, 0.5), /* Sombra negra para dar profundidad */
+        0 0 2px rgba(255, 255, 255, 0.1); /* Destello blanco muy fino como tiza */
+}
+
+.Card img{
+    height: 200px;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.Info{
+    display: flex;
+    flex-direction: column;
+    margin-left: 15px;
+    flex-wrap: wrap;
+}
+
+.Info h2{
+    font-size: 22px;
+    color: #f1f1f1;
+    font-family: agatho;
+    font-weight: lighter;
+}
+
+.Info h4{
+    margin-top: -15px;
+    margin-bottom: 18px;
+    color: #6d4ba3;
+    font-family: agatho;
+    font-weight: lighter;
+}
+
+.Info h5{
+    margin-top: -15px;
+    margin-bottom: 18px;
+    color: grey;
+    font-family: agatho;
+    font-weight: lighter;
+}
+
+#Precio{
+    font-size: 20px;
+    margin-top: auto;
+    margin-left: 15px;
+    font-family: agatho;
+    font-weight: lighter;
+}
+
+.Botones{ 
+    display: flex;
+    flex-direction: column; 
+    margin-top: auto;
+    justify-content: center;
+}
+
+.Botones p{
+    margin-left: 10px;
+    font-family: agatho;
+    font-weight: lighter;
+}
+
+.Agregar{ 
+    display: flex;
+    flex-direction: row; 
+    margin-bottom: 15px;
+    justify-content: center;
+    
+}
+
+#BotonAddCart{
+    width: 100px;
+    margin-left: 20px;
+    background-color:  #111;
+    border: 1px solid #6d4ba3;
+    color: #f1f1f1;
+    height: 25px;
+    font-family: agatho;
+    font-weight: lighter;
+}
+
+#BotonAddCart:hover{
+    background-color: #6d4ba3;
+}
+
+#Cant{
+    background: #0f0f10;
+    border: 1px solid #2a2a31;
+    color: #f1f1f1;
+}
+
+#Cant:hover{
+    border-color: #6d4ba3;
+}
+
+@font-face {
+    font-family: agatho;
+    src: url('../../assets/Agatho_\ RegularCAPS.otf');
+}

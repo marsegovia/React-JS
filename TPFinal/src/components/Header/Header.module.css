@@ -1,0 +1,54 @@
+
+.Header{
+    background-color: black;
+    color: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around; 
+    padding: 10px 20px; 
+    border-bottom: 2px solid #444;
+}
+
+.Nav{
+    display: flex;
+    flex-direction: row;
+    margin-right: 40px;
+    font-family: agatho;
+    font-size: 22px;
+}
+
+.Nav ul{
+    margin: 0;
+    padding: 0;
+    display: flex; 
+    gap: 20px; 
+    list-style-type: none; 
+}
+
+.Nav a {
+    text-decoration: none; /* 👈 Saca el subrayado */
+    color: white;
+    font-weight: 600;
+    text-transform: uppercase; /* Opcional: Todo en mayúsculas estilo metalero */
+    transition: color 0.3s ease;
+}
+
+/* 3. El efecto hover cuando pasan el mouse */
+.Nav a:hover {
+    color: #ff3333; /* Rojo furioso 🤘 */
+}
+
+.Logo{
+    height: 120px;
+}
+
+#icono{
+    color: white;
+}
+
+@font-face {
+    font-family: agatho;
+    src: url('../../assets/Agatho_\ RegularCAPS.otf');
+}

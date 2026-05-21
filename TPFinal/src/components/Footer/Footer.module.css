@@ -1,0 +1,43 @@
+.footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: #111;
+    color: white;
+    padding: 30px;
+    border-top: 2px solid #444;
+}
+
+.tarjetasEquipo {
+    display: flex; /* Alinea las 3 tarjetas una al lado de otra */
+    gap: 15px;     /* Espacio entre tarjetas */
+}
+
+.tarjeta {
+    background-color: #222;
+    padding: 10px;
+    border-radius: 5px;
+    text-align: center;
+    min-width: 100px;
+    font-family: a;
+}
+
+.empresaInfo h3{
+    font-family: wraith;
+    font-size: 20px;
+}
+
+.equipoContainer h4{
+    font-family: wraith;
+    font-size: 20px;
+}
+
+@font-face {
+    font-family: wraith;
+    src: url('../../assets/DEATHCROW.ttf');
+}
+
+@font-face {
+    font-family: a;
+    src: url('../../assets/Agatho_\ RegularCAPS.otf');
+}
