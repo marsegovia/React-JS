@@ -1,6 +1,6 @@
 import styles from '../Header/Header.module.css'
 import { Link } from "react-router-dom";
-import logoImg from "../../assets/wraithrecords.png";
+import logoImg from "../../../public/assets/wraithrecords.png";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {faCartShopping} from '@fortawesome/free-solid-svg-icons';
 

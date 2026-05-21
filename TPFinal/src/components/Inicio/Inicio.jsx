@@ -1,5 +1,5 @@
 import styles from "../Inicio/Inicio.module.css";
-import ImagenBanner from "../../assets/banner.png"
+import ImagenBanner from "../../../public/assets/banner.png"
 import { Link } from "react-router-dom";
 import ItemListContainer from "../ItemListContainer/ItemListContainer";
 

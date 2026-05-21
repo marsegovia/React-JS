@@ -1,7 +1,7 @@
 import { ItemList } from "../ItemList/ItemList";
 import styles from './ItemListContainer.module.css';
 import productosJson from "../../../public/Data/productos.json";
-import Icono from "../../assets/icono.png"
+import Icono from "../../../public/assets/icono.png"
 
 export function ItemListContainer({ Mensaje, filtro, mostrarIcono }) {
     // Si hay un filtro (ej: "destacado"), filtramos el array. Si no, mostramos todo.
