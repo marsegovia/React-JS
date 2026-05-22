@@ -1,8 +1,7 @@
 import styles from '../Header/Header.module.css'
 import { Link } from "react-router-dom";
 import logoImg from "../../../public/assets/wraithrecords.png";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {faCartShopping} from '@fortawesome/free-solid-svg-icons';
+import {CartWidget} from '../Cart/CartWidget';
 
 function Header() {
     return (
@@ -18,7 +17,7 @@ function Header() {
                     <li><Link to="/">Inicio</Link></li>
                     <li><Link to="/productos">Productos</Link></li>
                     <li><Link to="/nuevoProducto">Nuevo Producto</Link></li> 
-                    <li><Link to=""><FontAwesomeIcon id='icono' icon={faCartShopping} /></Link></li>     
+                    <li><Link to="/carrito"> <CartWidget/></Link></li>     
                 </ul>
             </nav>
         </header>

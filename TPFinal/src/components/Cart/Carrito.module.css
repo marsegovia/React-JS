@@ -1,0 +1,58 @@
+.Carrito{
+    display: grid;
+    grid-template-columns: 80px 2fr 1fr 1fr 1fr;
+    gap: 20px;
+    align-items: center; /* Alinea todo verticalmente al centro */
+    color: white;
+    
+}
+
+.VistaCarrito h1{
+    font-family: wraith;
+    color: white;
+    margin-left: 20px;
+}
+
+.VistaCarrito{
+    max-width: 1280px;
+    margin-left: 10px;
+}
+
+.ItemCarrito{
+    
+    margin: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid #ffffff; /* Color y grosor del borde */
+    border-radius: 12px;       /* Bordes redondeados */
+    padding: 20px;            /* Espacio interno entre el borde y los productos */
+    background-color: rgba(255, 255, 255, 0.05); /* Opcional: un fondo oscuro sutil */
+}
+
+.ItemCarrito img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.ItemCarrito h2 {
+    color: white;
+    font-family: a;
+    margin-left: 1010px;
+}
+
+.Carrito p {
+    text-align: center;
+    margin: 0;
+}
+
+@font-face {
+    font-family: wraith;
+    src: url('../../../public/assets/DEATHCROW.ttf');
+}
+
+@font-face {
+    font-family: a;
+    src: url('../../../public/assets/Agatho_\ RegularCAPS.otf');
+}

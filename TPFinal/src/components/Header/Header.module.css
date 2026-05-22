@@ -44,10 +44,6 @@
     height: 120px;
 }
 
-#icono{
-    color: white;
-}
-
 @font-face {
     font-family: agatho;
     src: url('../../assets/Agatho_\ RegularCAPS.otf');
