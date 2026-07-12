@@ -1,0 +1,176 @@
+Probando nuestra API por consola
+Vamos a recordar como usamos fetch para consultar una API y como podemos obtener por consola, la 
+información que estamos necesitando. Este código lo podemos incorporar debajo del código existente en el 
+archivo main.jsx del proyecto Vite.
+
+La idea es simple: pedimos el archivo y, cuando llega la respuesta, la mostramos en la consola. Si no 
+llega, mostramos un mensaje de error.
+
+    // src/main.jsx
+    fetch('/data/productos.json').then(respuesta => {
+        console.log('Respuesta cruda del servidor:', respuesta);
+        return respuesta.json();
+        }).then(datos => {
+            console.log('¡Productos cargados!', datos);
+        }).catch(error => {
+            console.error('¡Ups! Hubo un error:', error);
+        }).finally(() => {;
+
+¿Cómo lo probás?
+
+Para probar nuestro código vamos a seguis estos pasos:
+1. Pegá ese código en tu main.jsx.
+2. Asegurate de que tu archivo productos.json esté en public/data/productos.json.
+3. Ejecutá tu proyecto (npm run dev).
+4. Abrí las herramientas de desarrollador en tu navegador (con F12 o clic derecho >
+Inspeccionar) y andá a la pestaña Consola.
+Deberías ver los mensajes y, finalmente, el array de tus productos. Se debería ver algo de
+esta manera:
+
+Desmenuzando el código
+● fetch('/data/productos.json') : Le pide al servidor el archivo productos.json que está en
+la carpeta /data/. y nos devuelve una promesa que representa la respuesta del servidor
+● then(respuesta => { ... }) : Cuando el servidor contesta, entramos al primer .then. que nos
+devuelve un objeto de tipo Response con datos crudos (no JSON todavía).
+● console.log('Respuesta cruda del servidor:', respuesta); return respuesta.json(); : Una vez impreso 
+por consulta la respuesta, la convierte en un objeto/array de JavaScript.(Esto también devuelve otra promesa).
+● then(datos => { ... }) : Ahora sí tenemos los datos ya convertidos en JSON y los mostramos en consola:
+
+● console.log('¡Productos cargados!', datos);
+    catch(error => { ... }) : Si algo sale mal caemos en este bloque y al igual que los demás, lo 
+    mostramos por consola: console.error('¡Ups! Hubo un error:', error);
+● finally(() => {console.log('¡Productos cargados!', datos)} Se ejecuta siempre al final, haya 
+funcionado o no.
+
+Integrando todo: useEffect + fetch + useState
+Como vimos anteriormente, cuando pedimos datos, estos no aparecen al instante. Puede haber una demora o 
+puede que la petición falle. Una buena aplicación debe manejar estas situaciones para que el usuario 
+sepa qué está pasando.
+Para esto, vamos a usar tres useState:
+1. productos: Para guardar los datos cuando lleguen.
+2. cargando (loading): Un booleano (true/false) que nos dice si estamos esperando la respuesta
+3. error: Para guardar un mensaje de error si algo sale mal.
+
+Ahora juntemos todo en un componente. Dentro de nuestra carpeta componentes, creamos una carpeta y 
+su archivo .jsx llamada Productos. En el vamos a escribir el siguiente componente:
+
+    import React, { useState, useEffect } from 'react';
+    function Productos({Mensaje}) {
+        const [productos, setProductos] = useState([]);
+        const [error, setError] = useState(null);
+        const [cargando, setCargando] = useState(true);
+        useEffect(() => {
+            fetch('/data/productos.json').then((respuesta) => {
+                if (!respuesta.ok) {
+                    throw new Error('No se pudo cargar la información de losproductos');
+                }
+            return respuesta.json();
+            }).then((datos) => {
+                setProductos(datos);
+            }).catch((error) => {
+                setError(error.message);
+            }).finally(() => {
+                setCargando(false);
+            });
+        }, []);
+
+        if (cargando) {
+            return <p>Cargando productos, por favor espere...</p>;
+        }
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
+        
+        return (
+            <div>
+                <h1>{Mensaje}</h1>
+                <ul>
+                    {productos.map((producto) => (
+                       <li key={producto.id}>
+                            <h2>{producto.nombre}</h2>
+                            <img src={producto.imagen} alt={producto.nombre} width="150" />
+                            <p>Precio: ${producto.precio}</p>
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        );
+    }
+    export default Productos;
+
+Con este if (cargando) y if (error), le damos al usuario una respuesta inmediata sobre el estado de la 
+aplicación. ¡Eso es mejorar la experiencia de usuario (UX)!
+
+Explicación paso a paso:
+1. mportamos las hooks desde react y generamos la función con sus estados de inicio:
+
+import React, { useState, useEffect } from 'react';
+function Productos() {
+const [productos, setProductos] = useState([]);
+const [error, setError] = useState(null);
+const [cargando, setCargando] = useState(true);
+● productos: lista de productos cargados (arranca vacía).
+● error: mensaje de error en caso de fallo.
+● cargando: indica si estamos esperando la respuesta (true al inicio).
+
+2. Efecto con UseEffect
+useEffect(() => {
+fetch('/data/productos.json').then((respuesta) => {
+    if (!respuesta.ok) {
+        throw new Error('No se pudo cargar la información de losproductos');
+    }
+return respuesta.json();
+}).then((datos) => {
+setProductos(datos);
+}).catch((error) => {
+setError(error.message);
+}).finally(() => {
+setCargando(false);
+});
+}, []);
+
+● [] al final: significa que este useEffect se ejecuta solo una vez, cuando elcomponente aparece en pantalla.
+● explicación:
+1. Pide el archivo productos.json.
+2. Si la respuesta no es válida (!respuesta.ok), lanza un error.
+3. Si es correcta, convierte los datos a JSON y los guarda en productos.
+4. Si ocurre un error, lo guarda en error.
+5. Al final (exitoso o no), cambia cargando a false.
+
+3. Renderizado condicional
+if (cargando) {
+return <p>Cargando productos, por favor espere...</p>;
+}
+if (error) {
+return <p>Error: {error}</p>;
+}
+● Si estamos cargando, muestra un mensaje de “Cargando...”.
+● Si hubo error, muestra el mensaje de error.
+
+4. Mostramos los productos
+return (
+<div>
+<h1>{Mensaje}</h1>
+<ul>
+{productos.map((producto) => (
+<li key={producto.id}>
+<h2>{producto.nombre}</h2>
+<img src={producto.imagen} alt={producto.nombre} width="150"
+height="150"/>
+<p>Precio: ${producto.precio}</p>
+</li>
+))}
+</ul>
+</div>
+);
+● Mostramos el mensaje que mandamos como props según corresponda.
+● Recorre el array productos con .map.
+● Por cada producto, crea un <li> mostrando su nombre, imagen y precio.
+● key={producto.id} es importante en React para identificar cada elemento de la lista.
+
+Final
+Lo único que nos queda es importar y agregar el componente productos a nuestra
+aplicación.
+Los imágenes guardados en nuestra carpeta images ya se ven correctamente en nuestra
+página. Te invito a encontrarle el estilo correspondiente para que las imágenes se muestren
+en forma horizontal.

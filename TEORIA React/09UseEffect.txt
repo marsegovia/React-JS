@@ -1,0 +1,72 @@
+El Hook para todo lo "externo":
+Imaginen que sus componentes de React son como una pizzería. El flujo principal es preparar la pizza con
+los ingredientes que ya tienen (las props y el estado). Pero, ¿qué pasa si se quedan sin muzzarella? 
+Tienen que hacer algo "fuera" de ese flujo principal: llamar al proveedor.
+
+Eso, en React, es un efecto secundario. Son operaciones que interactúan con el mundo exterior al 
+componente. Ejemplos comunes de efectos secundarios:
+● Pedir datos a una API.
+● Manipular el DOM directamente.
+● Poner un setTimeout o un setInterval (poner un temporizador).
+
+Para manejar todo esto, React nos da el hook useEffect, que nos permite ejecutar un pedazo de código 
+después de que el componente se renderiza en la pantalla.
+
+La Sintaxis de useEffect es la siguiente:
+🚨Prestá atención a los números de los comentarios que nos va a ayudar a entenderlo mejor.
+
+    import React, { useEffect } from 'react';
+        useEffect(() => {
+        // Código que queremos ejecutar (el efecto)
+            console.log('El componente se acaba de mostrar en pantalla.');
+            return () => {
+            // La "limpieza" (opcional)
+                console.log('El componente se va a desmontar. Limpiando...');
+            };
+        }, [/*Array de dependencias */]);
+
+
+Desglosemos esto que parece más complicado de lo que es:
+1. La Función del Efecto: Es el primer parámetro. Acá va la lógica que queremos ejecutar. 
+Por ejemplo, el fetch para pedir datos.
+2. La función de limpieza (Opcional): Es lo que useEffect retorna. Se ejecuta cuando el componente está 
+por "desmontarse" (desaparecer de la pantalla) o antes de que el efecto se vuelva a ejecutar. Es ideal 
+para cancelar suscripciones o temporizadores y evitar problemas de memoria.
+3. El array de dependencias (¡La Clave!): Este array le dice a React cuándo tiene que volver a ejecutar 
+el efecto 
+○ [] (Array vacío): El efecto de la hooj se ejecuta una sola vez, justo después del primer 
+renderizado. Perfecto para buscar los datos iniciales de nuestra aplicación.
+○ [prop, estado]: El efecto se ejecuta la primera vez y cada vez que el valor de prop o estado cambie.
+○ Si no ponés el array: Cuidado con olvidartelos porque el efecto se ejecutará después de cada 
+renderizado. Esto puede crear bucles infinitos y colgarte la aplicación. Casi nunca es usado.
+
+Ejemplo básico de uso en el código:
+Como anteriormente hicimos un contador con useState, en este caso vamos a usar useEffec para hacer algo 
+simple con ese contador: mostrar por consola cuando el valor cambia. Eventualmente, la funcionalidad del 
+log puede cambiar por otr mas compleja:
+
+    // En /componentes/EjemploUseEffect.jsx
+    import { useState, useEffect } from "react"; // Importamos los hooks juntos!
+    export function Contador() {
+        const [contador, setContador] = useState(0);
+        useEffect(() => {
+            console.log("El componente se renderizó o el contador cambió.");
+        }, [contador]); // 👈 depende del contador
+        
+        return (
+            <div style={{ margin: "20px", padding: "15px", border: "1px solid black" }}>
+                <h3>Ejemplo sencillo de useEffect</h3>
+                <p>Valor actual: {contador}</p>
+                <button onClick={() => setContador(contador + 1)}>Sumale +1</button>
+                <button onClick={() => setContador(contador - 1)}>Restale -1</button>
+            </div>
+
+¿Que estamos viendo en nuestro código?
+1. Tenemos un contador hecho con useState que empieza en 0.
+2. Cada vez que hacemos clic en el botón (y de forma poco segura) sumamos uno a la variable contador o 
+restamos según corresponda.
+3. useEffect escucha el cambio en contador (porque está en el array de dependencias [contador]), y 
+cuando eso pasa, ejecuta el console.log(“mensaje”) 
+Con esto vemos en la consola del navegador cómo useEffect responde a los cambios del estado.
+Veamos ahora como podemos trabajar con useEffect para hacer nuestra página mas ágil.
+

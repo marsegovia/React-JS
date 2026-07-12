@@ -1,0 +1,59 @@
+.loginContainer{
+    color: white;
+    font-family: wraith;
+    font-size: 50px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+.loginContainer form p{
+    font-size: 15px;
+    color: aliceblue;
+    font-family: agatho;
+}
+
+.loginContainer form{
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-sizing: border-box;
+}
+
+.loginContainer form input{
+    width: 500px;
+    margin-bottom: 10px;
+    background-color: transparent;
+    border: 1px solid blueviolet;
+    height: 40px;
+    color:white
+}
+
+.loginContainer form button{
+    width: 508px;
+    margin-bottom: 20px;
+    background-color: blueviolet;
+    border: 1px solid blueviolet;
+    height: 40px;
+    color:white;
+    cursor:pointer;
+    font-family: agatho;
+    font-size: 18px;
+}
+
+.loginContainer form button:hover{
+    background-color: darkorchid;
+}
+
+
+@font-face {
+    font-family: agatho;
+    src: url('../../../public/assets/Agatho_\ RegularCAPS.otf');
+}
+
+@font-face {
+    font-family: wraith;
+    src: url('../../../public/assets/DEATHCROW.ttf');
+}

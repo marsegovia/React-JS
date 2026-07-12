@@ -1,0 +1,224 @@
+Hasta ahora, nuestra aplicación y todos sus componentes viven en una sola "página" o vista.
+Si quisiéramos mostrarlas por separado o incluso distintas secciones como "Inicio", "Productos destacados" 
+o "Contacto", la solución tradicional sería crear archivos HTML separados (index.html, productos.html, etc.).
+Esto, sin embargo, implica que el navegador debe recargar toda la página cada vez que el usuario navega, 
+perdiendo el estado de nuestra aplicación y resultando en una experiencia de usuario menos fluida.
+
+Las Single Page Applications (SPAs) resuelven este problema. En lugar de recargar la página, React intercepta 
+la navegación y simplemente renderiza los componentes necesarios para la nueva "vista" de forma dinámica. 
+El resultado es una experiencia rápida y fluida, similar a la de una aplicación de escritorio o móvil.
+Para gestionar esta lógica necesitamos tomar una referencia para cada componente, y esta referencia será la 
+URL. Para eso utilizamos una librería externa muy popular y estándar de facto en el ecosistema de React: 
+React Router.
+
+Creando nuestra barra de navegación:
+En el desafío de la clase 3 nos pedía incorporar la barra de navegación a nuestro Header. Si todavía no lo 
+hiciste, podés tomar el siguiente código de una barra de navegación muy básica para que puedas practicar los 
+temas de esta clase
+
+En esta oportunidad vamos a necesitar al menos 4 items:
+Inicio, Productos,Destacados y Alta de producto, cada uno corresponde a un componente que estuvimos haciendo.
+Detalle: Asegurate de que la barra de navegación tenga su estilo correspondiente.
+
+import styles from './Header.module.css';
+function Header() {
+return (
+<header className={styles.header}>
+<nav>
+<ul>
+<li><a href="">Inicio</a></li>
+<li><a href="">Productos</a></li>
+
+<li><a href="">Destacados</a></li>
+<li><a href="">Alta de producto</a></li>
+</ul>
+</nav>
+</header>
+);
+};
+export default Header;
+
+Instalación y configuración de react router
+El primer paso es añadir la librería a nuestro proyecto:
+1. Abrimos la terminal en la raíz de nuestro proyecto.
+2. Si nuestra aplicación está corriendo, entonces ejecutamos ctrl + c para pararla
+3. En la terminal ejecutamos el siguiente comando: npm install react-router-dom
+4. Una vez instalado vamos a encontrar este paquete en la carpeta de node_modules.
+
+Configuración:
+Para usarlo, debemos "envolver" nuestra aplicación para que toda ella tenga acceso a las funcionalidades de 
+ruteo. Generalmente hacemos esto en el archivo principal, main.jsx.
+
+En este archivo vamos a:
+1. importar BrowserRouter
+import { BrowserRouter } from 'react-router-dom';
+2. Reemplazamos el StricMode que envolvía nuestra App, por Browserrouter.
+// main.jsx
+import { StrictMode } from 'react' // Podemos eliminarlo.
+// Demas importaciones. Importamos BrowserRouter
+import { BrowserRouter } from 'react-router-dom';
+createRoot(document.getElementById('root')).render(
+<BrowserRouter>
+<App />
+</BrowserRouter>)
+
+El componente BrowserRouter es el que conecta nuestra aplicación con la API de historial del navegador, 
+permitiéndonos mantener la UI sincronizada con la URL.
+
+Rutas estáticas y estructura principal
+Ahora que hemos sentado las bases, es momento de definir la arquitectura de navegación de nuestra aplicación. 
+Lo haremos dentro de nuestro componente principal, App.jsx. Para ello, nos valdremos de dos componentes 
+fundamentales que nos provee React
+
+Router:
+● <Routes> (plural): Este componente actúa como un contenedor principal. Su función es examinar todas las 
+definiciones de rutas hijas (<Route>) que contiene y renderizar únicamente la primera página cuya propiedad path 
+coincida con la URL actual del navegador. Es, en esencia, el orquestador del ruteo.
+● <Route> (singular): Representa una ruta individual en nuestra aplicación. Es el componente que establece la 
+correspondencia directa entre un segmento de la URL y el componente de React que debe visualizarse. Sus 
+propiedades (props) más importantes son:
+    ○ path: Una cadena de texto (string) que define el patrón de la URL. Por ejemplo, "/productos".
+    ○ element: Recibe el componente (en formato JSX, por ejemplo <Productos />) que se renderizará cuando la 
+    URL coincida con el path definido.
+
+Para estructurar nuestra aplicación, reutilizaremos los componentes que hemos desarrollado, asignando a cada 
+uno una "página" o vista específica:
+● ItemListContainer: Será nuestra vista de productos principal, donde inicialmente mostrábamos datos 
+directamente desde el código.
+● Productos: Funcionará como una vista de productos "destacados", que consume datos desde un archivo local, 
+simulando una llamada a una API.
+● FormularioContainer: Corresponderá a la sección de "alta de productos", donde gestionamos la lógica para 
+capturar datos del usuario.
+
+Rutas anidadas en App.jsx
+Nuestro objetivo es lograr una estructura donde el Header y el Footer, contenidos en nuestro Layout, permanezcan 
+visibles en todas las páginas, mientras que el contenido principal sea dinámico y cambie según la navegación 
+del usuario. Para eso, comenzaremos importando los componentes necesarios en App.jsx:
+
+// /src/App.jsx
+import './App.css';
+import { ItemListContainer } from './componentes/ItemListContainer/ItemListContainer';
+import {Contador} from './componentes/Contador/Contador' // Lo podemos eliminar.
+import Productos from './componentes/Productos/Productos';
+import {FormularioContainer} from './componentes/FormularioContainer/FormularioContainer'
+import { Routes, Route } from 'react-router-dom';
+import Layout from './componentes/layout/Layout';
+
+Definiremos una ruta principal que renderizará nuestro <Layout /> y, dentro de ella, anidaremos las rutas 
+específicas para cada una de nuestras "páginas".
+
+// todas las importaciones anteriores
+function App() {
+return (
+<Routes>{/*envuelve a las demás para mostrar Header y Footer siempre */}
+<Route element={<Layout />}>
+<Route path="/" element={<h1>Página de Inicio</h1>} />
+<Route path="/productos" element={<ItemListContainer
+Mensaje={"Productos destacados"}/>} />
+<Route path="/destacados" element={<Productos
+
+Mensaje={"Todos los productos"}/>} />
+<Route path="/alta" element={<FormularioContainer />} />
+</Route>
+</Routes>);
+}
+
+Nota importante: Observen que estamos anidando las rutas dentro de una ruta contenedora que renderiza nuestro 
+Layout. Todavía no funciona! porque para que esto funcione, el componente Layout debe incluir el componente 
+Outlet de React Router, que actúa como un marcador de posición donde se renderizarán los componentes hijos
+(Productos, AltaProductos, etc.).
+
+Integración de nuestro layout con Outlet
+Pensemos en nuestro componente <Layout /> como el marco de un cuadro. Este marco es constante y define la 
+estructura visual que siempre estará presente: nuestro encabezado (Header) y nuestro pie de página (Footer).
+Ahora, el contenido de ese cuadro —la pintura— es lo que necesita cambiar dinámicamente según la sección de 
+nuestra aplicación que el usuario esté visitando. React Router usa <Outlet /> donde debe colocar esa "pintura" 
+dentro de nuestro marco 
+
+De props.children a <Outlet />
+En un componente de React tradicional, sin ruteo, usaríamos la prop children para pasar contenido. Haríamos 
+algo como esto:
+
+// En App.jsx (SIN React Router)
+<Layout>
+<h1>Este es el contenido de la página de inicio</h1>
+</Layout>
+// En Layout.jsx
+function Layout({ children }) {
+return (
+<>
+<Header />
+<main>{children}</main> {/* Aquí renderizamos lo que pasamos */}
+<Footer />
+</>
+);
+}
+
+Este patrón funciona, pero es estático. Sin embargo, con React Router, la situación es diferente porque el 
+componente que se debe renderizar no lo decide App directamente, sino que lo determina la URL actual del 
+navegador.
+El componente <Outlet /> actúa como un marcador de posición dinámico y contextual. No es una prop, sino un 
+componente provisto por React Router que está sabe del estado del ruteo.
+
+El Mecanismo Detrás de Escena
+Cuando un usuario navega a, por ejemplo, /productos:
+1. Coincidencia de Ruta: El componente <Routes> en app.jsx analiza la URL. Encuentra que /productos
+coincide con una ruta anidada: <Route path="/productos" element={<ItemListContainer />} />.
+2. Renderizado del Padre: React Router observa que esta ruta está dentro de la ruta contenedora <Route
+element={<Layout />} />. Por lo tanto, lo primero que hace es renderizar el elemento de la ruta padre: el
+componente <Layout />.
+3. El Rol del Outlet: Mientras renderiza <Layout />, se encuentra con el componente <Outlet />. En ese preciso 
+momento, <Outlet /> consulta el estado interno de React Router y dice: "Ah, estoy dentro de un layout que 
+corresponde a una ruta padre. La ruta hija que coincidió es /productos, por lo tanto, en mi lugar, debo 
+renderizar el elemento correspondiente a esa ruta, que es <ItemListContainer />".
+
+// En /componentes/layout/Layout.jsx
+import Header from '../layout/Header'
+import Footer from '../layout/Footer'
+import { Outlet } from 'react-router-dom'; // Importamos Outlet
+
+// Todo lo que pongamos dentro de <Layout> en App.jsx será el "children".
+function Layout({ children }) {
+return (
+<>
+<Header />
+<main>
+{/* Aquí se renderizará el componente de la ruta activa */}
+<Outlet />
+</main>
+<Footer />
+</>
+);
+};
+export default Layout;
+
+
+Conectando a nuestra barra de navegación.
+Ya tenemos las rutas definidas y necesitamos que los enlaces de nuestra barra de navegación (el componente
+Header.jsx de la clase 3) realmente naveguen a esas rutas sin recargar la página. Para esto, reemplazamos las 
+etiquetas <a> por el componente Link de React Router.
+
+Header.jsx - Reemplazando <a> por <Link>
+La diferencia es fundamenta estará en que la etiqueta <a href="/productos"> le dice al navegador "andá a buscar 
+este documento", causando una recarga completa. En cambio, <Link to="/productos"> le dice a React Router 
+"cambiá la URL y renderizá el componente asociado a esta ruta", sin recargar la página.
+
+import styles from './Header.module.css';
+import { Link } from 'react-router-dom'; // 1. Importamos Link
+function Header() {
+return (
+<header className={styles.header}>
+<nav>
+<ul>
+{/* 2. Usamos Link en lugar de <a> y 'to' en lugar de 'href' */}
+<li><Link to="/">Inicio</Link></li>
+<li><Link to="/productos">Productos</Link></li>
+<li><Link to="/destacados">Destacados</Link></li>
+<li><Link to="/alta">Alta de Productos</Link></li>
+</ul>
+</nav>
+</header>
+);
+};
+export default Header;
+

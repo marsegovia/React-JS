@@ -1,0 +1,198 @@
+Contexto a la cantidad de productos
+Un problema común que seguramente notaron es que, al agregar un producto, el contador de cantidad en la vista de productos no 
+"recuerda" cuántas unidades ya tenemos en el carrito. Si navegamos fuera del componente y volvemos, el contador se reinicia. 
+Esto sucede porque su estado es local.
+La solución es hacer que ese contador lea y manipule directamente el estado de nuestro CartContext. De esta manera, la cantidad 
+será un dato global y consistente en toda la aplicación.
+
+Dividiremos la acción en 2 pasos:
+1. Obtenemos la cantidad en el contexto
+2. Conectamos con su contador
+
+Paso 1: Obtener la cantidad desde el contexto
+Primero, necesitamos una función en nuestro contexto que nos diga la cantidad actual de un producto específico en el carrito. 
+Modifiquemos nuestro componente CartContext.jsx en src/context/CartContext.jsx:
+Vamos a agregar la función getCantidadActual que nos permitirá “recordar” cuantos productos tenemos cargados. No te olvides 
+agregar la función al contexto.
+    export const CartProvider = ({ children }) => {
+        const [cart, setCart] = useState([]);
+        const addToCart = (product, cantidad) => {
+        // Como estaba antes
+        };
+
+    // NUEVA FUNCIÓN: Obtener la cantidad de un item específico
+    const getCantidadActual = (productId) => {
+        const item = cart.find(item => item.id === productId);
+        return item ? item.cantidad : 0;
+    };
+    
+    return (
+        <CartContext.Provider
+            value={{
+                cart, getCantidadActual, // <-- Exportamos la nueva función
+                addToCart, clearCart, getCartQuantity, getCartTotal
+    }}
+    >
+    {children}
+    </CartContext.Provider>
+
+Paso 2: Conectar el contador de productos
+Ahora, en nuestro componente que muestra el producto y permite agregar cantidad vamos a consumir esta nueva función. 
+El contador ya no dependerá de un estado local, sino del estado global del carrito.
+// En /componentes/Item/Item.jsx
+import { Link } from 'react-router-dom';
+import { useCart } from '../../context/CartContext'; // Nuevas importaciones
+import { useState } from 'react';
+export function Item({ id, nombre, precio, stock, imagen }) {
+const producto = { id, nombre, precio, stock, imagen };
+
+// Traemos la función del contexto
+const { addToCart, getCantidadActual } = useCart();
+const [cantidad, setCantidad] = useState(0);
+// Obtenemos la cantidad YA existente en el carrito desde el contexto
+const cantidadActual = getCantidadActual(producto.id);
+// Funcion incrementar y decrementar
+const handleAddToCart = () => {
+addToCart(producto, cantidad);
+//alert(`Agregaste ${cantidad} unidades de ${nombre} al carrito.`);
+};
+const [esFavorito, setEsFavorito] = useState(false);
+const marcarComoFavorito = () => {
+setEsFavorito(!esFavorito);
+};
+return (
+<div className="card-producto">
+{/* --- Modificamos unicamente la parte del contador--- */}
+<div style={{ display: 'flex', alignItems: 'center', justifyContent:
+'center', margin: '10px 0' }}>
+<button onClick={decrementar}>-</button>
+{/* --- Acá le pasamos la cantidad Actual que tenemos en el carrito---
+*/}
+
+<p style={{ margin: '0 15px', fontWeight: 'bold'
+}}>{cantidadActual}</p>
+<button onClick={incrementar}>+</button>
+</div>
+<button onClick={handleAddToCart}>
+{/* --- Esto es siempre de a uno --- */}
+Agregar {cantidad} al carrito
+</button>
+</div>
+);
+}
+export default Item;
+
+Con esta modificación, el componente siempre mostrará cuántas unidades ya existen en el carrito (cantidadActual), 
+independientemente de la navegación. El contador local servirá únicamente para definir cuántas nuevas unidades se sumarán en el próximo clic.
+
+Lógico condicional:
+Una buena experiencia de usuario implica mostrar información relevante en el momento oportuno. No tiene sentido, por ejemplo, 
+cargar un componente de información de usuario si no hay un usuario registrado, o incluso mostrar una tabla vacía si el
+carrito no contiene productos. Con React podemos trabajar estas ideas de manera muy sencilla: con condicionales normales que 
+retornen un jsx u otro según corresponda.
+
+Finalizar compra y volver al inicio
+La lógica es simple:
+● Si el carrito tiene productos, debemos mostrar un botón para "Finalizar Compra".
+● Si está vacío, el mensaje "No hay productos" debe ir acompañado de un botón que lo invite a volver al inicio para seguir comprando.
+
+Modifiquemos nuestro archivo src/componentes/Cart/Cart.jsx:
+// src/components/Cart/Cart.jsx
+import { useCart } from '../../context/CartContext';
+import { Link } from 'react-router-dom'; // Importamos Link para la
+navegación
+const Cart = () => {
+const { cart, clearCart, getCartTotal } = useCart();
+// Si el carrito está vacío, mostramos un mensaje y un botón para volver
+Continúa en la siguiente hoja.
+
+if (cart.length === 0) {
+return (
+<div>
+<h1>El carrito está vacío</h1>
+<p>Agregá productos para continuar la compra.</p>
+<Link to="/productos" className="btn-volver">
+Ver Productos
+</Link>
+</div>
+);
+}
+// Si hay productos, los mostramos con las opciones de finalizar y vaciar
+return (
+<div>
+<h1>Carrito de Compras</h1>
+{cart.map(item => (
+<div key={item.id} className="cart-item">
+<h4>{item.nombre}</h4>
+<p>Cantidad: {item.quantity}</p>
+<p>Precio unitario: ${item.precio}</p>
+<p>Subtotal: ${item.precio * item.quantity}</p>
+<hr />
+</div>
+))}
+<hr />
+<h3>Total a pagar: ${getCartTotal()}</h3>
+<button onClick={clearCart} className="btn-vaciar">Vaciar
+Carrito</button>
+< <Link to="/" onClick={()=>alert("Gracias por
+comprar")}className="btn-finalizar">
+Finalizar Compra
+</Link>
+</div>
+);
+};
+export default Cart;
+
+Análisis del código:
+● Importamos Link de react-router-dom para crear enlaces de navegación sin recargar la página.
+● Dentro del if (cart.length === 0), en lugar de solo texto, ahora tenemos un <Link to="/"> que dirige al usuario a la página principal.
+● En el return principal (cuando hay productos), agregamos un <Link to="/" para que vaya a nuestra página principal, y 
+mandamos un mensaje de alerta.
+
+Eliminar un producto específico
+Un carrito real necesita más que solo agregar y vaciar. El usuario debe poder eliminar productos específicos y el
+sistema debe verificar si un ítem ya existe. Agreguemos ese contexto a nuestro carrito.
+
+Abriremos el archivo src/context/CartContext.jsx y agregaremos las siguientes funciones:
+// src/context/CartContext.jsx
+import React, { useState, useContext, createContext } from 'react';
+export const CartContext = createContext();
+export const useCart = () => {
+// Se mantiene igual
+};
+export const CartProvider = ({ children }) => {
+const [cart, setCart] = useState([]);
+const addToCart = (product, cantidad) => {
+// Se mantiene igual
+};
+// NUEVA FUNCIÓN: Eliminar un producto del carrito
+const removeItem = (productId) => {
+const updatedCart = cart.filter(item => item.id !== productId);
+setCart(updatedCart);
+};
+// NUEVA FUNCIÓN: Verificar si un producto ya está en el carrito
+const isInCart = (productId) => {
+return cart.some(item => item.id === productId);
+};
+//getCartTotal,getCartQuantity, clearCart se mantienen igual
+return (
+<CartContext.Provider 
+value={{
+//Otras exportaciones
+removeItem, // <-- Exportamos la nueva función
+isInCart, // <-- Exportamos la nueva función
+}}>
+{children}
+</CartContext.Provider>
+);
+};
+Desglose de las nuevas funciones:
+
+● removeItem(productId): Utiliza el método filter de los arrays para generar un nuevo carrito que contiene todos los ítems 
+excepto el que coincide con el productId recibido. Es una forma inmutable y declarativa de eliminar elementos.
+● isInCart(productId): Usa el método some, que devuelve true si al menos un elemento del array cumple con la condición 
+(en este caso, si algún item.id es igual -ñ.al productId). 
+Es ideal para validaciones rápidas.
+Ahora, para usarlo, modificá tu Cart.jsx para que cada producto tenga su botón de eliminar: Recordá en el onClick del botón 
+"Eliminar", usarlo como una arrow function: () => removeItem(item.id) 
+para poder pasar el id del producto específico a la función.

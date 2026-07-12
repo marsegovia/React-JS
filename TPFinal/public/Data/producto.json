@@ -1,15 +1,5 @@
 [
         {
-            "id": 1,
-            "banda": "Mortification",
-            "album": "Relentless",
-            "formato": "LP",
-            "precio": 82000,
-            "stock": 2,
-            "imagen": "./assets/mortif.jpg",
-            "categoria": ""
-        },
-        {
             "id": 2,
             "banda": "Control Denied",
             "album": "The Fragile Art Of Existence",

@@ -1,0 +1,157 @@
+Conexión a Firebase: nuestro primer Backend
+
+¿Qué es Firebase?
+Firebase es una plataforma de desarrollo de aplicaciones de Google que nos provee un conjunto de herramientas para construir 
+aplicaciones web y móviles de alta calidad. Lo que nos interesa hoy es una de sus herramientas principales: Firestore.
+Firestore es una base de datos NoSQL, flexible y escalable, que almacena datos en formato de documentos (muy similar a un objeto
+JSON). Funciona en la nube, lo que significa que podemos leer y escribir datos desde nuestra aplicación de React en tiempo real.
+
+¿Cómo lo usaremos?
+1. Crearemos un proyecto en la consola de Firebase.
+2. Configuraremos una base de datos Firestore.
+3. Cargaremos nuestros productos del archivo productos.json a una "colección" en Firestore.
+4. Conectaremos nuestra app de React a Firebase para que nuestro componente lea los productos desde la nube.
+
+Paso 1: Configurar el proyecto en Firebase
+1. Vayan a la Consola de Firebase y accedan con su cuenta de Google.
+2. Hagan clic en "Crear un proyecto" y asígnenle un nombre (ej: "mi-ecommerce-react").
+3. Sigan los pasos de configuración (pueden deshabilitar Google Analytics por ahora si lo desean).
+4. Una vez creado, en el panel principal, hagan clic en el ícono de web </> para registrar una nueva aplicación web.
+5. Denle un apodo (ej: "Tienda Talento Tech") y hagan clic en "Registrar app".
+6. Firebase les proporcionará un objeto de configuración. Copialo y guardalo que lo vamos a necesitar.
+
+Paso 2: Crear la base de datos Firestore
+1. En el menú lateral izquierdo de la consola de Firebase, vayan a "Compilación" > "Firestore Database".
+2. Hagan clic en "Crear base de datos".
+3. Seleccionen "Iniciar en modo de prueba". Esto nos permite leer y escribir sin configurar reglas de seguridad complejas por ahora.
+4. Elijan una ubicación para sus servidores (generalmente la más cercana a su región).
+5. ¡Listo! Ya tienen su base de datos Firestore creada.
+
+Cargar nuestros productos a Firebase
+Vamos a cargar los datos de dos maneras distintas:
+1. Cargando manualmente cada producto a nuestra base de datos en Firebase por su interfaz
+2. Cargando los datos por nuestro formulario
+En la siguiente clase haremos una carga masiva de datos a Firebase.
+
+Carga manual.
+Ahora que tenemos la base de datos, necesitamos cargarla. Podemos hacerlo de dos formas, por ahora cargaremos los datos de a uno.
+1. En la interfaz de Firestore, verán un botón para "+ Iniciar colección". Una colección es como una tabla en las bases de datos tradicionales.
+2. Nombren la colección "productos nacionales".
+
+3. Ahora, debemos agregar "documentos" (nuestros productos). Hagan clic en "Agregar documento".
+4. Firestore pide un "ID del documento". Pueden hacer clic en "ID automático".
+5. Ahora, agreguen los campos de su primer producto, replicando la estructura de productos.json (categoría, nombre, precio, 
+stock e imagen.). Agregale las categorías que quieras, pero es importante que haya categoría e imágen.
+6. Este proceso se repite para cada uno de los productos del archivo JSON
+
+Es importante entender que una colección sería un array y cada documento son cada uno de los objetos que corresponde en nuestro 
+array, en este caso a cada producto y sus características.
+
+En amarillo la colección y en violeta los documentos.
+
+Este proceso manual sirve para entender la estructura. Más adelante, veremos cómo crear scripts para hacer cargas masivas de datos.
+
+Mostrar lo cargado en Firebase: Configuración
+Una vez que tenemos 10 productos cargados en Firebase, vamos a mostrarlos en nuestra aplicación.
+Para comenzar vamos a integrar nuestro proyecto con una aplicación web. Para eso vamos a nuestro pantalla principal de firebase 
+elegimos crear app, y creamos una aplicación web.
+
+En esta aplicación le asignamos un nombre, y nos dará el código para instalar firebase como dependencia con npm.
+Para instalarla vamos a nuestra terminal y pegamos el código que nos muestra: npm install firebase
+Esto puede tardar unos minutos.
+Una vez que se instala, vamos a incluír las configuraciones necesarias en nuestro proyecto.
+En src/ creamos una carpeta llamada firebase y dentro un archivo llamado config.js ( src/firebase/config.js )
+En el vamos a pegar el código que vemos debajo. Es algo similar a esto:
+
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// Comentarios.
+const firebaseConfig = {
+apiKey: "AISyCelxxNBGFzW9Rb4yCdLjBMs2MDMVaXyalYU",
+authDomain: "react-c9743.firebaseapp.com",
+projectId: "react-c9743",
+storageBucket: "react-c9743.firebasestorage.app",
+messagingSenderId: "933655766258",
+appId: "1:933655766258:web:e18886a2cfeb7de0913ca7",
+measurementId: "G-9PRRX78S4R"
+};
+const app = initializeApp(firebaseConfig);
+
+// Si agregaste Analytics verás esto además.
+const analytics = getAnalytics(app);
+
+A este código vamos a agregar las siguientes líneas:    import { getFirestore } from "firebase/firestore";
+Que nos permitirá obtener la base de datos de firestor de cualquier proyecto wue tengamos acá configurado.
+
+Posteriormente representaremos a nuestra base de datos en una constante, y como queremos usar esta bd desde otros archivos, 
+vamos a exportarla.
+
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app)
+
+Para ver nuestros productos cargados vamos a seguir estos pasos:
+1. Creamos un componente que muestre un h1, con su .module.css correspondiente llamado productosNacionales
+2. Enrutamos nuestro componente a nuestra aplicación y lo agregamos a nuestra barra de navegación.
+Una vez probada la URL y con la vista correcta, vamos a generar la función para mostrar los productos.
+
+import React, { useState, useEffect } from 'react';
+// Importaciones clave de Firebase
+import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/config';
+
+const ProductosNacionales = () => {
+// Estado para guardar los productos que traigamos de la DB
+const [productos, setProductos] = useState([]);
+useEffect(() => {
+const productosDB = collection(db,"Productos nacionales")
+getDocs(productosDB).then((resp) => {
+setProductos(
+resp.docs.map((doc) => {
+return{...doc.data(),id: doc.id}
+})
+);
+})
+}, []); // El array vacío asegura que este efecto se ejecute solo una vez
+return (
+<div>
+<h1>Productos Nacionales</h1>
+
+<div className="lista-productos">
+{/* 5. Mapeamos el estado `productos` para renderizar cada
+uno */}
+{productos.map(prod => (
+<div key={prod.id} >
+<img src={prod.imagen} alt={prod.nombre} style={{
+width: '100px' }} />
+<h3>{prod.nombre}</h3>
+<p>Categoría: {prod.categoria}</p>
+<p>Precio: ${prod.precio}</p>
+<p>Stock: {prod.stock} unidades</p>
+<hr />
+</div>
+))}
+</div>
+</div>
+);
+};
+export default ProductosNacionales;
+
+Explicación del código.
+UseEffect: Utilizamos este hook para ejecutar el código que pide los datos a Firebase con su array de dependencias vacío ([]) 
+para que se ejecute una sola vez, justo después de que el componente se monte por primera vez en la pantalla
+const productosDB = collection(db, "Productos nacionales"). Collection es una función de firebase que recibe dos parámetros: 
+las credenciales y la coleccion que queremos. Esto no trae los datos todavía, porque lo que hace es crear una referencia, una
+especie de "puntero" que le dice a Firebase exactamente a qué colección queremos acceder.
+
+Petición Asincrónica con getDocs: getDocs(productosDB) es la función que efectivamente realiza la petición a la base de datos. 
+Esta operación es asincrónica, lo que significa que la aplicación no se congela esperando la respuesta; sigue funcionando y
+cuando los datos llegan, se ejecuta el siguiente paso. Por eso utilizamos .then(). Devuelve una promesa que, al resolverse, nos da 
+una respuesta (resp). Esta respuesta no es un simple array, es un objeto complejo de Firebase
+
+resp.docs contiene un array con todos los documentos de la colección., por lo que será necessario usar.map() para recorrer cada 
+doc de ese array. Recordá que cada doc es un documento individual de Firestore.
+La información que nos interesa está dentro del método .data(), que nos devuelve un objeto con todos los campos que creamos 
+(nombre, precio, stock, etc.). Con { ...doc.data(), id: doc.id } creamos un nuevo objeto tomando todos los campos de
+doc.data() con el spread operator (...) y le agregamos una nueva propiedad id.
+setProductos() toma este nuevo array de objetos ya limpios y formateados, y actualiza nuestro estado. Este cambio de estado 
+provoca que el componente se vuelva a renderizar, pero esta vez, con la lista de productos lista para ser mostrada.

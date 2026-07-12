@@ -1,0 +1,102 @@
+Aplicando estilo: CSS Global vs. CSS Modules
+Ahora que tenemos la estructura, vamos a profundizar en los estilos.
+Para aplicarle estilos a nuestra página, vamos a ver dos formas distintas:
+1. CSS Modules
+2. CSS Global
+
+CSS Modules
+La forma recomendada para darle estilo a nuestros componentes y además evitar que los estilos de un componente se 
+pisen con los de otro, usamos CSS Modules. Es la mejor práctica y nos salva de muchos dolores de cabeza.
+
+¿Cómo funciona?
+1. Elijamos un componente que tengamos creado, por ejemplo Header.jsx y si tiene aplicado css en línea, lo copiamos 
+y lo borramos de este archivo. (con etiquet style y todo)
+2. Creá un archivo de estilos con la extensión .module.css en la misma carpeta del componente, layout en nuestro 
+caso, y pegá el css copiado anteriormente.
+
+    // /componentes/layout/Header.module.css
+    .header{
+        background-color:#8DE2D6;
+        padding:10px;
+        text-Align:center;
+        color:"white";
+    }
+
+Ahora vemos que si vamos a nuestra página, no vamos a tener estilo para este componente. 
+Lo que nos falta es importarlo.
+
+En tu componente elegido, importá los estilos como un objeto y usalo de la siguiente manera:
+Si en tu archivo .module.css creaste una clase llamada .header, entonces la forma de usarlo es llamando a esa clase 
+desde el archivo styles className={styles.header}.
+
+Creá y aplicá otros estilos para el h1 de esa página.
+    // /componentes/layout/Header.jsx
+    import styles from './Header.module.css'
+    function Header() {
+        return (
+            <header className={styles.header}>
+                <h1>Bienvenidos a mi App React</h1>
+            </header>
+        );
+    }
+    export default Header;
+
+La gran ventaja: La clase .header de este componente nunca chocará con otra clase .header que puedas tener en otro 
+archivo. Cada estilo es local a su componente y los CSS Modules generan nombres de clase únicos para evitar 
+colisiones
+
+CSS Global
+Cuando creamos un proyecto con Vite, nos encontramos con dos archivos CSS principales: index.css y App.css. Aunque 
+ambos aplican estilos de forma global, tienen roles distintos.
+
+index.css: Este archivo es importado en main.jsx, que es el punto de entrada de toda tu aplicación. Por lo tanto, 
+los estilos que ponés acá son los de más alto nivel, los que afectan al documento entero.
+
+¿Para qué se usa?
+● Lo usamos para aplicar estilos en <html> y <body>, como el color de fondo general, la tipografía por defecto para 
+toda la página, margin: 0, box-sizing, etc.
+● Reseteos de CSS (Resets): Para que tu página se vea igual en todos los navegadores, eliminando los estilos que 
+traen por defecto.
+● Variables CSS Globales: Es el lugar ideal para definir variables de color, espaciado, etc., que vas a usar en 
+todo el proyecto.
+
+App.css: Este archivo se importa directamente en App.jsx. Su propósito es darle estilo al componente App y a los 
+elementos principales que contiene.
+
+¿Para qué se usa?
+● Estilos para la maquetación principal de la app (el div con className="App", por ejemplo).
+● Clases de utilidad generales que quieras tener a mano.
+● Estilos para elementos que solo existen dentro de App.jsx, como el header o footer si los tenés ahí.
+Estos estilos se aplican a todo el proyecto. Son útiles, pero hay que tener cuidado de no definir clases muy 
+genéricas que puedan chocar entre sí.
+
+Aplicando estilos globales
+Vamos a modificar nuestro archivo index.css para controlar todos los aspectos de nuestro sitio web. Para eso vamos 
+a eliminar su contenido y vamos a aplicarle las normas generales de nuestra aplicación:
+    *{
+    margin:0;
+    padding: 0;
+    box-sizing: content-box;
+    }
+
+    body {
+    font-family: 'Helvetica', sans-serif;
+    margin: 0;
+    background-color: #f4f4f4;
+    }
+    
+    h1, h2, h3, p {
+    color:black;
+    font-size: 16px;
+    }
+
+¿Por qué al cambiar index.css no cambia todo?
+Acá entra en juego un concepto fundamental que tenemos que recordar de CSS: la especificidad y la cascada.
+1. Primero, el navegador aplica sus estilos por defecto.
+2. Luego, vos aplicás los tuyos con index.css, por ejemplo background-color: #f4f4f4.
+3. Después, viene una capa más específica con App.css. Por ejemplo, si en App.css tenés una clase 
+    .contenedor-especial con background-color: white, 
+    cualquier etiqueta que tenga esa clase será blanco, tapando el gris que definiste en index.css.
+
+Con estos cambios puedo ver que cambió mucho el diseño de la aplicación. Lo último que
+te propongo, es desde el inspector del sitio web, encontrar quien tiene padding y sacarselo.

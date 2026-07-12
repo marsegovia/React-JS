@@ -76,7 +76,6 @@
     flex-direction: row; 
     margin-bottom: 15px;
     justify-content: center;
-    
 }
 
 #BotonAddCart{
@@ -88,6 +87,7 @@
     height: 25px;
     font-family: agatho;
     font-weight: lighter;
+    cursor: pointer;
 }
 
 #BotonAddCart:hover{
@@ -98,6 +98,7 @@
     background: #0f0f10;
     border: 1px solid #2a2a31;
     color: #f1f1f1;
+    cursor: pointer;
 }
 
 #Cant:hover{

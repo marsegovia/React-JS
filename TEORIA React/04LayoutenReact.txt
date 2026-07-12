@@ -1,0 +1,43 @@
+Estructura de nuestro proyecto
+¿Cómo Organizo mis Carpetas?
+Una vez que tenemos nuestro proyecto hecho, y con varios componentes creados, nos damos una idea de que a medida 
+que crece nuestra página, crece la cantidad de componentes. Por eso a medida que un proyecto empieza a tener muchos 
+componentes, el orden es fundamental.
+
+Dentro de nuestra carpeta src creamos una carpeta llamada llamada componentes, y dentro de ella, creamos una carpeta 
+por cada componente, donde contendrá su componente jsx y su respectivo css.
+
+Buenas prácticas:
+● Una carpeta por componente: Si un componente tiene su propio CSS o archivos relacionados, es una buena idea
+meter todo en su propia carpeta.
+● Nombres en PascalCase: Los archivos de componentes siempre con la primera letra en mayúscula (Boton.jsx,
+TarjetaUsuario.jsx).
+
+Estructura y composición de componentes Repaso y preparación del proyecto
+Ahora vamos a dar un paso más allá y aprenderemos a estructurar una aplicación completa, componiendo esos pequeños 
+componentes para formar el layout de una página web.
+
+1. Abrí tu proyecto en Visual Studio Code.
+2. Iniciá el servidor de desarrollo: Abrí una terminal integrada y ejecutá npm run dev para ver tu aplicación en el 
+navegador.
+3. Limpiá tu App.jsx: Vamos a borrar los ejemplos de la clase pasada dentro de la función App para tener un lienzo 
+limpio donde empezar a construir nuestro layout.
+Tu archivo /src/App.jsx debería verse así para empezar:
+    
+    import './App.css';
+    function App() {
+        return (
+            <div>
+                <h1>Mi Aplicación</h1>
+            </div>
+        );
+    }
+    export default App;
+
+
+Estilos básicos:
+Si queremos darle estilo a alguna etiqueta de nuestro componente, podemos usar la palabra style como propiedad del 
+tag HTML para aplicarle css en línea, o aplicarlo con variables como usamos en clases anteriores. 
+La sintaxis sería la siguiente:
+        <H2 style={{ backgroundColor: "#8DE2D6",color: "white" }}> 
+con doble llaves para tomar el par propiedad:valor.

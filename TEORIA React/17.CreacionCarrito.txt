@@ -1,0 +1,188 @@
+Creación de nuestro componente "Carrito"
+Antes de centralizar la lógica, necesitamos una vista para el carrito.
+1. Dentro de src/componentes, creá una nueva carpeta Cart y dentro, un archivo Cart.jsx.
+2. Por el momento vamos a hacer que muestre un mensaje sencillo. Podés escribirle lo que quieras. Te dejo un ejemplo:
+
+// src/componentes/Cart/Cart.jsx
+    import React from 'react';
+    
+    const Cart = () => {
+    // Por ahora, este componente solo mostrará un mensaje.
+    // Más adelante, consumirá los datos de nuestro contexto.
+        return (
+            <div>
+                <h1>Carrito de Compras</h1>
+                <p>Aquí se mostrarán los productos que agregaste.</p>
+            </div>
+        );
+    };
+    
+    export default Cart;
+
+Como vimos en la clase anterior, vamos a agregar la nueva ruta en nuestro App.jsx
+
+    // En src/App.jsx
+    // Otras importaciones
+    import Layout from './componentes/layout/Layout';
+    import ProductoDetalle from './componentes/Productos/ProductoDetalle';
+    import Cart from './componentes/Cart/cart'; // Importamos el componente creado
+        function App() {
+            return (
+            <Routes>
+            <Route element={<Layout />}>
+            {/* Otras rutas....*/}
+            <Route path="/carrito" element={<Cart />} />
+            </Route>
+            </Routes>
+    );
+    }
+    export default App;
+
+Creamos nuestro “CartContext”
+Vamos a unir todo creando el contexto que englobe la información necesaria. No solo crearemos el contexto, sino que lo dejaremos 
+listo para ser implementado en nuestros componentes existentes.
+
+Crear el archivo CartContext.jsx
+Primero, creamos la estructura que ya conocemos, pero esta vez la pensaremos como el "cerebro" central de nuestro carrito. 
+En la raíz de src, crea una nueva carpeta llamada context. Dentro, crea el archivo CartContext.jsx con el siguiente código 
+explicado paso a paso:
+1. Importaciones necesarias
+    import React, { useState, useContext, createContext } from 'react';
+● useState → para guardar y actualizar el carrito.
+● useContext → para poder consumir el contexto desde los componentes.
+● createContext → para crear el contexto.
+2. Creación del contexto
+    export const CartContext = createContext();
+
+Aquí estamos creando el contexto en sí. Pensá que el contexto es como una “caja” donde vamos a guardar y compartir datos 
+(en este caso, el carrito).
+3. Custom Hook useCart
+    export const useCart = () => {
+        const context = useContext(CartContext);
+        if (!context) {
+        throw new Error('useCart debe ser usado dentro de un CartProvider');
+    }
+    return context;
+    };
+● Crearemos esta hook personalizada porque nos facilita el consumo del contexto en
+cualquier componente.
+● En lugar de escribir useContext(CartContext) cada vez, simplemente usaremos
+useCart().
+● Si alguien intenta usarlo fuera del proveedor (CartProvider), lanzará un error claro.
+
+4. El CartProvider (nuestro cerebro 🧠)
+   export const CartProvider = ({ children }) => {
+    const [cart, setCart] = useState([]);
+● CartProvider es un componente especial que envolverá a toda tu app.
+● Dentro, usamos un useState([]) → el carrito arranca vacío.
+5. Creamos las funciones que manejan el carrito
+a. addToCart
+
+    const addToCart = (product, quantity) => {
+c   onst itemInCart = cart.find(item => item.id === product.id);
+    if (itemInCart) {
+    const updatedCart = cart.map(item =>
+    item.id === product.id ? { ...item, quantity: item.quantity + quantity } : item
+    );
+    setCart(updatedCart);
+    } else {
+    s   etCart(prevCart => [...prevCart, { ...product, quantity }]);
+    }
+};
+
+● Busca si el producto ya está en el carrito.
+● Si está → suma la cantidad.
+● Si no está → lo agrega como nuevo.
+b. clearCart
+const clearCart = () => {
+setCart([]);
+};
+● Vacía el carrito
+c. getCartQuantity
+const getCartQuantity = () => {
+return cart.reduce((acc, item) => acc + item.quantity, 0);};
+● Recorre el carrito y suma todas las cantidades.
+● Sirve para mostrar, por ejemplo, el numerito de productos en un ícono 🛒.
+d. getCartTotal
+const getCartTotal = () => {
+return cart.reduce((acc, item) => acc + item.precio * item.quantity,
+0);
+};
+● Calcula el precio total de todos los productos en el carrito.
+6. Retorno del CartProvider
+return (
+<CartContext.Provider value={{ cart, addToCart, clearCart,
+getCartQuantity, getCartTotal }}>
+{children}
+</CartContext.Provider>
+);
+};
+● CartContext.Provider es el que realmente comparte la información.
+● El value={{ ... }} contiene todo lo que cualquier componente va a poder usar:
+○ cart → el estado del carrito.
+○ addToCart, clearCart, getCartQuantity, getCartTotal → las funciones que
+controlan el carrito.
+
+● {children} → asegura que todo lo que envuelva CartProvider (tu app o un grupo de
+componentes) pueda acceder al carrito.
+Código completo en la siguiente hoja
+
+Código completo:
+// src/context/CartContext.jsx
+import React, { useState, useContext, createContext } from 'react';
+export const CartContext = createContext();
+export const useCart = () => {
+const context = useContext(CartContext);
+if (!context) {
+throw new Error('useCart debe ser usado dentro de un CartProvider');
+}
+return context;
+};
+export const CartProvider = ({ children }) => {
+const [cart, setCart] = useState([]);
+const addToCart = (product, quantity) => {
+const itemInCart = cart.find(item => item.id === product.id);
+if (itemInCart) {
+const updatedCart = cart.map(item =>
+item.id === product.id
+? { ...item, quantity: item.quantity + quantity }
+: item
+);
+setCart(updatedCart);
+} else {
+setCart(prevCart => [...prevCart, { ...product, quantity }]);
+}
+};
+const clearCart = () => {
+setCart([]);
+};
+const getCartQuantity = () => {
+return cart.reduce((acc, item) => acc + item.quantity, 0);
+};
+const getCartTotal = () => {
+return cart.reduce((acc, item) => acc + item.precio * item.quantity,
+0);
+};
+return (
+<CartContext.Provider value={{ cart, addToCart, clearCart,
+getCartQuantity, getCartTotal }}>
+{children}
+</CartContext.Provider>
+);
+};
+
+Envolver la aplicación con el Provider
+Este es un paso muy importante y que no puede faltar. Hacemos que el "cerebro" esté
+disponible para toda la App.
+En src/main.jsx importamos CartProvider y envolvemos el componente <App />
+// src/main.jsx
+// Otras importaciones
+import { BrowserRouter } from 'react-router-dom'; // Importamos BrowserRouter
+import { CartProvider } from './context/CartContext.jsx';
+createRoot(document.getElementById('root')).render(
+<BrowserRouter>
+<CartProvider> {/* Envolvemos la App */}
+<App />
+</CartProvider>
+</BrowserRouter>
+)

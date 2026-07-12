@@ -1,0 +1,108 @@
+Rutas Dinámicas
+Vimos que nuestra página ya tiene el ruteo correcto, pero tenemos acceso a todos loscomponentes que enrutemos. 
+Sin embargo muchas veces vamos a necesitar ver una información y no otra, como también tener acceso a información
+puntual de un producto.
+
+¿Qué sucede si queremos tener una página de detalle para cada producto? No vamos a crear una ruta estática por 
+cada uno. En su lugar, creamos una ruta dinámica que utilice un parámetro.
+
+En App.jsx, agregamos una nueva ruta con un parámetro :id:
+
+import ProductoDetalle from './componentes/Productos/ProductoDetalle'; 
+{/* ... dentro de <Routes> */}
+
+<Route path="/producto/:id" element={<ProductoDetalle />} />
+
+El prefijo : (dos puntos) le indica a React Router que id es un parámetro dinámico. Para acceder al valor de 
+este parámetro dentro del componente ProductoDetalle, usamos el hook useParams que nos devuelve un objeto con 
+los parámetros de la URL. 
+
+ProductoDetalle.jsx - Accediendo a Parámetros de URL
+
+import { useParams } from 'react-router-dom';
+const ProductoDetalle = () => {
+const { id } = useParams();
+// Con este 'id', podríamos hacer una llamada a una API para buscar los
+datos del producto
+return (
+<div>
+<h2>Detalle del Producto</h2>
+<p>Mostrando información para el producto con ID:
+<strong>{id}</strong></p>
+</div>
+);
+};
+export default ProductoDetalle;
+
+Resultado
+Vamos a probar nuestra función. Por el momento vamos generar la URL manualmente,
+ingresando por ejemplo:
+
+http://localhost:5173/producto/6
+Si ingresamos esperamos ver un párrafo con la siguiente información:
+Mostrando información para el producto con ID: 6
+Mejora
+Vamos a mejorar nuestra aplicación y hagamos que al cambiar nuestra URL, nos muestre
+toda la información del producto en cuestión.
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+const ProductoDetalle = () => {
+const { id } = useParams();
+const [producto, setProducto] = useState(null);
+useEffect(() => {
+fetch('/data/productos.json')
+.then(response => response.json())
+.then(data => {
+const productoEncontrado = data.find(p => p.id === parseInt(id));
+setProducto(productoEncontrado);
+})
+.catch(error => console.error("Error al cargar el producto:", error));
+}, [id]);
+if (!producto) {
+return <h2>Cargando detalle del producto...</h2>;
+}
+if (!producto.id) {
+return <h2>Producto no encontrado.</h2>;
+}
+return (
+<div>
+<h2>Detalle del Producto: {producto.nombre}</h2>
+
+<img src={producto.imagen} alt={producto.nombre} style={{ maxWidth:
+'400px' }} />
+<h3>${producto.precio}</h3>
+<p>{producto.descripcion}</p>
+</div>
+);
+};
+export default ProductoDetalle;
+
+linkeando productos
+Vamos ahora a editar nuestro componente Producto.jsx para que podamos darle clic a un producto y se modifique 
+nuestra URL.
+En estos casos, vamos igualmente a incorporar la etiqueta Link, pero además de importarla vamos a utilizar otra 
+forma para pasarle el id.
+
+<Link to={`/producto/${producto.id}`}></Link>
+import React, { useState, useEffect } from 'react';
+import styles from './Productos.module.css';
+import { Link } from 'react-router-dom';
+function Productos({Mensaje}) {// Los useState se mantienen igual
+useEffect(() => {// Con su fetch que llama a data/json}
+return (
+<div>
+<h1>{Mensaje}</h1>
+<ul className={styles.listaProductos}>
+{productos.map((producto) => (
+<li key={producto.id} className={styles.itemProducto}>
+// Acá está lo importante. Prestá atención a la etiqueta <Link></Link>
+<Link to={`/producto/${producto.id}`}>
+<h2>{producto.nombre}</h2>
+<img src={producto.imagen} alt={producto.nombre} width="150" height="150" />
+<p>Precio: ${producto.precio}</p>
+</Link></li>))}
+</ul>
+</div>
+);
+}
+export default Productos;

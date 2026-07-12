@@ -1,0 +1,63 @@
+Simulando nuestra propia API
+
+Para un eCommerce, necesitamos mostrar productos, y esos productos no van a estar escritos directamente 
+en el código. Tienen que venir de algún lado. Se podrían pedir a una API externa, pero a veces estas 
+tienen algunas limitaciones.
+Por eso, vamos a trabajar con un archivo JSON local como si fuera una API remota y vamos a obtener su
+información como si fuera una API externa, con fetch.
+
+Carpeta public vs. Carpeta src
+Esta diferencia es un concepto teórico fundamental.
+● La carpeta src (source/fuente): Es el corazón de nuestra aplicación. Todo el código que escribimos 
+(componentes, hooks, estilos) vive acá. Cuando "compilamos" el proyecto, herramientas como Vite o Create 
+React App agarran todo lo de src, lo procesan, optimizan y lo "empaquetan" en archivos JavaScript y CSS 
+que el navegador entiende. No podemos usar fetch para leer un archivo de src, porque para el navegador, 
+esa estructura de carpetas no existe. Si queremos usar algo de src, lo tenemos que importar.
+● La carpeta public: Es como la "vidriera" de nuestra tienda. Todo lo que pongamos acá (imágenes, 
+fuentes, o nuestro archivo de datos) no se procesa ni se empaqueta. Simplemente se copia tal cual a la 
+carpeta final del proyecto. Esto significa que podemos acceder a estos archivos directamente a través de 
+una URL, como si fuera un sitio web normal.
+src es para nuestro código fuente, public es para los "assets" estáticos.
+
+Creando nuestros datos
+Cuando creamos el proyecto, vimos que teníamos una estructura de carpetas particular. Hasta el momento 
+estuvimos trabajando en la carpeta src. La carpeta Public tiene una imágen (vite.svg) que es el ícono de 
+la pestaña. Vamos a eliminar ese Icono y vamos a crear nuestros propios datos.
+1. Dentro de la carpeta public, creen una nueva carpeta llamada data
+2. Dentro de public/data, creen un archivo productos.json.
+3. Dentro de la carpeta public, creen otra carpeta llamada images. Acá van a guardar las fotos de
+los productos.
+
+
+Ahora, en productos.json, vamos a poner un array de objetos. Cada objeto es un producto:
+    [
+        {
+            "id": 1,
+            "nombre": "Camara Instantánea",
+            "precio": 85000,
+            "stock":22,
+            "imagen": "/images/CamaraInstantanea.png"
+        },
+    
+        {
+            "id": 2,
+            "nombre": "Camara Nikon",
+            "precio": 97500,
+            "stock":2,
+            "imagen": "/images/CamaraNikon.webp"
+        },
+        
+        {
+            "id": 3,
+            "nombre": "Monitor Curvo",
+            "precio": 110000,
+            "stock":2,
+            "imagen": "/images/MonitorCurvo.jpg"
+        },
+    ]
+
+Si querés agregar todos las imágenes de la carpeta images, recordá modificar la ruta y
+también el valor del ID de cada uno.
+
+Importante: Nota que la ruta de la imagen empieza con una diaganola! (“ / “) Esto le dice
+al navegador que busque desde la raíz del sitio, que es nuestra carpeta public.

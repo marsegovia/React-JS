@@ -1,0 +1,107 @@
+Creando y usando nuestro primer componente
+
+Ahora sí, ¡a programar! Cuando creamos el proyecto, Vite nos regaló un componente App.jsx con un ejemplo de un contador. 
+Es un buen punto de partida, pero ahora vamos a limpiarlo para empezar a construir nuestra propia aplicación desde cero. 
+Nuestro objetivo es crear un componente simple de bienvenida y mostrarlo en la pantalla principal.
+
+Paso 1: Crear nuestro componente "hijo" (Bienvenida.jsx)
+Primero, vamos a crear el componente que queremos mostrar. Por convención, los nombres de los archivos de componentes 
+empiezan con mayúscula.
+1. Creá un nuevo archivo: Dentro de la carpeta /src, creá un archivo llamado Bienvenida.jsx. Cuando retornamos un solo 
+elemento JSX, como por ejemplo un <h1> podemos hacerlo en una sola línea como se muestra a continuación.
+
+Escribí el componente: Un componente es simplemente una función de JavaScript que devuelve JSX. Copiá el siguiente 
+código en tu nuevo archivo y guardalo.
+    
+    import React from "react";
+    function Bienvenida() {
+        return <h1>¡Bienvenidos a mi curso!</h1>;
+    }
+
+    export default Bienvenida; // Clave para poder usarlo en App.jsx u otros archivos
+
+Pero si queremos retornar varios elementos, necesitamos envolverlos dentro de un contenedor como un 
+<div> o un <> (fragment).
+    
+    function Bienvenida(){
+        return (
+            <div>
+                <h1>¡Bienvenidos a mi curso!</h1>
+                <p>Vamos por mas 🫶</p>
+            </div>
+        );
+    }
+
+    export default Bienvenida;
+
+Un solo elemento: se puede devolver directamente.
+Varios elementos: React exige que estén dentro de un único contenedor.
+● Ese contenedor puede ser un <div> o un Fragmento (<> ... </>).
+● Los fragmentos son útiles cuando no querés agregar un div extra al HTML.
+
+Paso 2: Limpiar y preparar nuestro componente principal (App.jsx)
+Ahora, vamos al archivo /src/App.jsx. Este es nuestro componente “padre” o principal.
+Actualmente, contiene la lógica del contador que Vite creó. y veíamos en pantalla al correr nuestro código. Vamos a 
+limpiarlo para mostrar únicamente nuestro componente Bienvenida.
+
+● Abrí /src/App.jsx. Vas a ver un código similar a este:
+    // Código original de Vite que lo vamos a borrar!
+    import { useState } from 'react'
+    import reactLogo from './assets/react.svg'
+    import viteLogo from '/vite.svg'
+    import './App.css'
+    
+    function App() {
+        const [count, setCount] = useState(0) // ... código JSX con logos, botones y textos
+    }
+
+    export default App
+
+● Reemplazá todo el contenido del archivo App.jsx con este código base. Estamos quitando toda la lógica del contador 
+(useState), las importaciones de los logos y el JSX de ejemplo para tener un lienzo limpio.
+
+    // En /src/App.jsx
+    import './App.css';
+    function App() {
+        return (
+            <div>
+                {/* Acá vamos a poner nuestro componente */}
+            </div>
+        );
+    }
+
+    export default App;
+
+Ahora tenemos un componente App vacío y listo para recibir a otros componentes adentro.
+
+Paso 3: Integrar Bienvenida dentro de App 
+Con nuestro componente principal ya limpio, vamos a "invocar" o "renderizar" nuestro componente Bienvenida adentro.
+1. Importá el componente Bienvenida al principio de App.jsx. Así, App sabe que existe y puede usarlo.
+2. Usá el componente Bienvenida dentro del div del return, como si fuera una etiqueta HTML.
+El código final de tu /src/App.jsx debería verse así:
+
+    // En /src/App.jsx
+    import Bienvenida from './Bienvenida'; // 1. Importamos nuestro componente
+    import './App.css';
+    function App() {
+        return (
+            <div>
+                {/* 2. Lo usamos como si fuera una etiqueta HTML */}
+                <Bienvenida />
+                <p>Este es mi primer componente montado en App.jsx</p>
+            </div>
+        );
+    }
+
+    export default App;
+
+Paso 4: Montar App dentro de main.jsx
+    import React from 'react';
+    import ReactDOM from 'react-dom/client';
+    import App from './App.jsx';
+    
+    ReactDOM.createRoot(document.getElementById('root')).render(
+        <React.StrictMode>
+        <App />
+        </React.StrictMode>
+    )

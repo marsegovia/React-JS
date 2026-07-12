@@ -1,0 +1,88 @@
+Creación del Layout
+
+Maquetando la app: componentes de layout
+Como se vió en el curso anterior, toda página web comparte una estructura básica: un encabezado, un contenido 
+principal y un pie de página. 
+En React, en lugar de tener todo en un index.html, creamos componentes reutilizables para cada una de estas partes.
+
+● Layout.jsx: Envuelve todo el contenido que queremos mostrar.
+● Header.jsx: Contendrá el logo, el título principal, etc.
+● Navbar.jsx: La barra de navegación, que a menudo va dentro del Header.
+● Main.jsx: Un contenedor para el contenido principal y cambiante de cada página.
+● Footer.jsx: El pie de página con links, copyright, etc.
+
+Esto no solo es más ordenado, sino que nos permite, por ejemplo, usar el mismo Header y Footer en todas las páginas 
+de nuestra aplicación sin repetir código.
+
+header y footer.
+Vamos a crear dos componentes nuevos para darle forma a nuestro sitio. Crearemos estos dos primeros componentes en 
+su respectiva carpeta con exportación por default.
+
+Header.jsx
+Este componente representa la cabecera de nuestro sitio web. En el vamos a comenzar mostrando el título de nuestro 
+sitio web.
+    function Header() {
+        return (
+            <header style={{ backgroundColor: "#8DE2D6", padding: "10px", textAlign: "center", color: "white" }}>
+                <h1>Bienvenidos a mi App React</h1>
+            </header>
+        );
+    }
+    export default Header;
+
+Estamos aplicando CSS en línea directamente al componente (después lo cambiaremos) lo que nos permite agregar un 
+poco de estilo a nuestro página.
+
+Footer.jsx
+Este componente actúa como el pie de página del sitio. Al igual que el header, vamos a agregarle estilo en línea y 
+vamos a exportarlo por default.
+
+    function Footer() {
+        return (
+            <footer style={{ backgroundColor: "#8DE2D6", padding: "10px", textAlign: "center", marginTop: "20px", 
+            color:"black" }}>
+                <p>&copy; 2025 - Mi Aplicación React</p>
+            </footer>
+        );
+    }
+    export default Footer;
+
+Layout
+Volvamos a la prop children, recordemos que es una prop automática que contiene todo lo que esté entre la etiqueta 
+de apertura y cierre de un componente. En este caso nos es perfecta para el componente de maquetado. Podemos crear 
+un componente Layout que envuelva todo el contenido que queramos mostrar.
+Para eso vamos a importar e implementar el Header.jsx y Footer.jsx que hicimos anteriormente. Recordá que lo 
+importamos de esta manera porque hicimos un export default. Si hiciste una exportación nombrada, vas a tener que 
+modificar la forma de importar el componente.
+
+    // En /components/Layout/Layout.jsx
+        import Header from './Header';
+        import Footer from './Footer';
+    // Todo lo que pongamos dentro de <Layout> en App.jsx será el "children".
+    export function Layout({ children }) {
+        return (
+            <div>
+                <Header />
+                    <main> {children} </main>
+                <Footer />// Continua abajo!
+            </div>);}
+En este componente Layout, agregamos el Header y el Footer lo que nos permite
+modificarlos sin necesidad de tocar el Layout u otro contenido de nuestra página.
+
+Luego, en App.jsx, lo usamos de esta manera:
+1. Lo importamos según corresponda nuestra exportación
+2. Dentro de las llaves de apertura y cierre de <Layout>, incorporamos la prop children.
+    
+    // /src/App.jsx
+        import './App.css';
+        import { Layout } from './componentes/layout/Layout';
+            function App() {
+                return (
+                    <Layout>
+                    {/* Todo lo que pongamos acá adentro irá donde estaba {children} */}
+                        <h1>¡Bienvenidos a mi página!</h1>
+                        <p>Este es el contenido principal.</p>
+                    </Layout>
+                );
+        }
+    export default App;

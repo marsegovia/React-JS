@@ -25,7 +25,7 @@ export function Inicio(){
                 <ItemListContainer 
                     mostrarIcono={true} 
                     Mensaje="NOVEDADES DEL SELLO" 
-                    filtro="Destacado" 
+                    filtro="Destacado"
                 />
             
         </div>

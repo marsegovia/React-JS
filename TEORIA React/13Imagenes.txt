@@ -1,0 +1,112 @@
+Subiendo imágenes a Imgbb
+
+Características:
+● Enlaces directos: Te da URLs (como i.ibb.co/.../imagen.jpg) para insertar las imágenes donde quieras.
+● Si no te registraste: Podés subir imágenes sin necesidad de crear una cuenta, pero se borran después de un tiempo.
+● Albumes y gestión: Si creas una cuenta gratuita, puedes organizar tus imágenes en álbumes y gestionarlas.
+
+Primero, necesitamos una API Key de Imgbb. Es un código único que nos identifica y nos autoriza a usar su servicio.
+1. Registrate en Imgbb.com. Es gratis y podés ingresa rcon tu cuenta de gmail.
+2. Una vez dentro, andá a la sección "Acerca" (Arriba a la izquierda) y luego a "API".
+3. Hacé clic en "GET API-KEY" y te mostrará tu clave de API. Copiala y guardala que la vamos a necesitar en un momento.
+4. Lo ideal es guardar la API-KEY en una variable en un archivo .env en la raíz de tu proyecto y luego 
+importarla para su uso en los componentes correspondientes. Por el momento podes usarlo como te quede más cómodo.
+
+¡Es importante!
+Ahora, modifiquemos nuestro formulario para que acepte archivos, porque como el input de la imágen se manejará 
+de forma un poco diferente, le pasaremos una nueva prop llamada manejarCambioImagen.
+Recordá agregarla en la función FormularioProfucto y modificarla en el input de tipo file.
+
+Modificando nuestro contenedor - FormularioContainer.jsx,
+Vamos a implementar la lógica para tomar el archivo que el usuario seleccionó, enviarlo a Imgbb y, una vez que 
+tengamos la URL, simular el envío final de todos los datos juntos. Modificaremos el archivo en 3 pasos:
+1. Modificamos el estado para guardar el archivo imágen.
+2. Creamos la función manejarCambioImagen.
+3. Modificar manejarEnvio.
+
+1. Crear un nuevo estado para guardar el archivo de imagen seleccionado:
+Para eso, lo eliminamos del useState que teníamos y lo pasamos aparte.
+
+// En src/contenedores/FormularioContainer/FormularioContainer.jsx
+const [datosForm, setDatosForm] = useState({
+nombre: '',
+precio: '',
+stock: ''
+// Quitamos la urlImagen de aca porque la obtendremos después de la subida
+});
+
+// 1. Nuevo estado para el archivo de imagen
+const [imagenFile, setImagenFile] = useState(null);
+2. Implementar la función manejarCambioImagen para actualizar ese estado:
+const manejarCambio = (evento) => { // Se mantiene igual};
+
+// 2. Nueva función para manejar el cambio del input de tipo "file"
+const manejarCambioImagen = (evento) => {
+setImagenFile(evento.target.files[0]);
+};
+
+evento.target.files es un array con los archivos seleccionados, pero como solo permitimos
+uno, tomamos el primero (índice 0).
+
+3. Modificar manejarEnvio para que:
+○ Primero, suba la imagen a Imgbb usando fetch.
+○ Segundo, con la URL de la imagen ya obtenida, construya el objeto final del producto.
+○ Finalmente, muestre en consola el objeto completo, listo para ser enviado a nuestro propio backend en el futuro.
+
+Para enviar un archivo necesitamos usar un objeto especial llamado FormData, que está
+diseñado para enviar archivos y datos de formulario.
+
+const manejarEnvio = async (evento) => {
+evento.preventDefault();
+// Validamos que el usuario haya seleccionado una imagen
+if (!imagenFile) {
+alert("Por favor, selecciona una imagen para el producto.");
+return;
+}
+// --- Lógica para subir la imagen a Imgbb ---
+const apiKey = 'TU-API-KEY'; // 🚨 ¡Reemplazá esto con tu clave!
+const formData = new FormData();
+formData.append('image', imagenFile);
+try {
+console.log("Subiendo imagen a Imgbb...");
+const respuestaImgbb = await
+fetch(`https://api.imgbb.com/1/upload?key=${apiKey}`, {
+method: 'POST',
+body: formData,
+});
+const datosImgbb = await respuestaImgbb.json();
+if (datosImgbb.success) {
+console.log("Imagen subida con éxito. URL:", datosImgbb.data.url);
+// Unimos la URL de la imagen con el resto de los datos del
+formulario
+const productoCompleto = {
+...datosForm,
+// Agregamos la URL obtenida
+urlImagen: datosImgbb.data.url
+};
+
+// Por el momento hacemos un console.log
+console.log('Enviando los siguientes datos COMPLETOS a la API:',
+productoCompleto);
+} else {
+throw new Error('La subida de la imagen a Imgbb falló.');
+}
+} catch (error) {
+console.error("Error en el proceso de envío:", error);
+alert("Hubo un error al subir la imagen. Por favor, intentá de
+nuevo.");
+}
+};
+return (
+<FormularioProducto
+datosForm={datosForm}
+manejarCambio={manejarCambio}
+manejarEnvio={manejarEnvio}
+// Pasamos la nueva función como prop
+manejarCambioImagen={manejarCambioImagen}
+/>
+);
+
+Una vez que enviamos el formulario, veremos por consola los datos cargados. Tambien si
+actualizamos nuestra cuenta en Imgbb, veremos que tenemos las imágenes cargadas
+correctamente.

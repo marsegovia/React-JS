@@ -18,9 +18,9 @@ export const Carrito = () => {
                         <div key={item.id} className={styles.Carrito} >
                             <img src={item.imagen} alt={item.album} style={{ width: '50px' }} />
                             <h3>{item.banda} - {item.album}</h3>
-                            <p>Precio un: ${item.precio}</p>
-                            <p>Cantidad: {item.quantity}</p>
-                            <p>Subtotal: ${item.precio * item.quantity}</p>
+                            <p>Precio unidad ${item.precio}</p>
+                            <p>Cantidad - {item.quantity}</p>
+                            <p>Subtotal - ${item.precio * item.quantity}</p>
                         </div>                   
                     ))}
                     <h2>Total  ${totalPrice}</h2>

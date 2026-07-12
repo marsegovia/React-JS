@@ -1,0 +1,48 @@
+.listaProductos {
+    display: flex;
+    flex-direction: row;
+    font-family: agatho;
+    font-size: 22px;
+}
+
+.listaProductos ul {
+    color: white;
+}
+
+.listaProductos li {
+    display: grid;
+    flex-direction: row;
+    grid-template-columns: 1200px 1fr 1fr;
+    margin-bottom: 5px;
+}
+
+.barra{
+    width: 100%;
+}
+
+.Edit{
+    background-color: blueviolet;
+    border: 1px solid blueviolet;
+    color: white;
+    cursor: pointer;
+    height: 22px;
+    font-size: 15px;
+    font-family: agatho;
+}
+
+.Delete{
+    background-color: red;
+    border: 1px solid red;
+    color: white;
+    cursor: pointer;
+    height: 23px;
+    font-size: 15px;
+    font-family: agatho;
+}
+
+.Gestion h3{
+    font-family: wraith;
+    margin-left: 20px;
+    font-size: 22px;
+    color: white;
+}

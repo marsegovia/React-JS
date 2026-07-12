@@ -1,11 +1,16 @@
 import './App.css';
 import { Layout } from './components/Layout/Layout';
 import { ItemListContainer } from './components/ItemListContainer/ItemListContainer';
-import FormularioContainer from './components/FormularioProductos/FormularioContainer';
 import Productos from './components/Productos/Productos';
 import { Routes, Route } from 'react-router-dom';
 import Inicio from './components/Inicio/Inicio';
 import Carrito from './components/Cart/Carrito';
+import VinilosImportados from './components/ProductosImportados/VinilosImportados';
+import ItemDetalle from './components/ProductosImportados/Detalle';
+import Gestion from './components/GestionProductos/GestionProductos';
+import Login from './components/Login/Login';
+import Registro from './components/Registro/Registro';
+import ProtectedRoute from './components/ProtectedRoute/ProtectedRoutes';
 
 function App() {
   return (
@@ -13,9 +18,17 @@ function App() {
       <Route element={<Layout />}>
         <Route path="/" element={<Inicio />} />
         <Route path="/productos" element={<ItemListContainer Mensaje={"Catalogo"} />} />
-        <Route path="/nuevoProducto" element={<FormularioContainer />} />
+         <Route path="/gestion"
+            element={
+                <ProtectedRoute rolesPermitidos={["admin"]}>
+                    <Gestion />
+                </ProtectedRoute>
+            }
+        />
+        <Route path="/productos/:id" element={<ItemDetalle />} />
         <Route path="/carrito" element={<Carrito/>} />
-      </Route>
+         <Route path="/login" element={<Login/>} />
+         <Route path="/registro" element={<Registro />} /></Route>
     </Routes>);
 }
 

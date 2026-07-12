@@ -1,12 +1,49 @@
 .formStyle {
         display: flex;
         flex-Direction: column;
+        justify-content: center;
         color:white;
-        max-Width: 24rem;
+        box-sizing: border-box;
         margin: 3rem auto;
         padding: 1.5rem;
-        border: 1px solid #ddd;
-        border-Radius: 8px;
         gap: 16px;
+        font-family: agatho;
 }
 
+.formStyle h3{
+        margin-top: -50px;
+        font-family: wraith;
+        font-size: 30px;
+        text-align: center;
+}
+
+.formStyle button{
+        background-color: blueviolet;
+        height: 30px;
+        font-size: 18px;
+        font-family: agatho;
+        color: white;
+        border: 1px solid blueviolet;
+        cursor: pointer;
+}
+
+.formStyle button:hover{
+        background-color: darkorchid;
+}
+
+.cont{
+        display: flex;
+        flex-direction: column;
+        margin-left: 30px;
+        margin-right: 30px;
+}
+
+.cont label{
+        font-size: 20px;
+}
+
+.cont input{
+        width: 100%;
+        margin-bottom: 15px;
+        height: 22px;
+}
