@@ -16,11 +16,11 @@ export const Carrito = () => {
                 <div className={styles.ItemCarrito}>
                     {cart.map((item) => (
                         <div key={item.id} className={styles.Carrito} >
-                            <img src={item.imagen} alt={item.album} style={{ width: '50px' }} />
+                            <img src={item.imagen} alt={item.album} />
                             <h3>{item.banda} - {item.album}</h3>
-                            <p>Precio unidad ${item.precio}</p>
-                            <p>Cantidad - {item.quantity}</p>
-                            <p>Subtotal - ${item.precio * item.quantity}</p>
+                            <p>${item.precio}</p>
+                            <p>x{item.quantity}</p>
+                            <p>${item.precio * item.quantity}</p>
                         </div>                   
                     ))}
                     <h2>Total  ${totalPrice}</h2>

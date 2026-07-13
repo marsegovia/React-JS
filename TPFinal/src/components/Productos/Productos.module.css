@@ -1,0 +1,12 @@
+.Contenedor{
+    
+}
+
+
+
+@media (max-width: 760px){
+    .Contenedor{
+        display: flex;
+        flex-wrap: wrap;
+    }
+}

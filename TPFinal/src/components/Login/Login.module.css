@@ -57,3 +57,30 @@
     font-family: wraith;
     src: url('../../../public/assets/DEATHCROW.ttf');
 }
+
+@media (max-width:760px){
+    .loginContainer{
+        font-size: 30px;
+    }
+
+    .loginContainer form p{
+        font-size: 12px;
+    }
+
+    .loginContainer form{
+        margin-top: 20px;
+    }
+
+    .loginContainer form input{
+        width: 350px;
+        margin-bottom: 10px;
+        height: 30px;
+    }
+
+    .loginContainer form button{
+        width: 360px;
+        height: 30px;
+        font-size: 16px;
+    }
+
+}

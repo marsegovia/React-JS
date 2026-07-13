@@ -41,3 +41,36 @@
     font-family: a;
     src: url('../../assets/Agatho_\ RegularCAPS.otf');
 }
+
+@media (max-width:760px){
+    .footer {
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .tarjetasEquipo {
+        display: flex;
+        flex-direction: row;
+        gap: 5px;   
+    }
+
+    .tarjeta {
+        padding: 0px;
+        min-width: 120px;
+        font-family: agatho;
+        font-size: 13px;
+    }
+
+    .empresaInfo{
+        margin-left: -60px;
+    }
+
+    .empresaInfo h3{
+        font-size: 18px;
+    }
+
+    .equipoContainer h4{
+        font-size: 18px;
+    }
+}

@@ -73,3 +73,41 @@
     font-family: agatho;
     src: url('../../assets/Agatho_\ RegularCAPS.otf');
 }
+
+
+@media (max-width: 760px) {
+    .Header{
+        flex-direction: column;
+        align-items: flex-start;
+        margin-left: -10px;
+    }
+
+    .Nav{
+    font-size: 15px;
+    }
+
+    .Nav ul{
+        display: flex; 
+        flex-direction: column;
+        gap: 10px; 
+    }
+
+    .Nav a {
+        font-weight: 500;
+    }
+
+    .Logo{
+        margin-left: 100%;
+        height: 120px;
+    }
+
+    .UserSection span {
+        font-size: 10px; 
+    }
+
+    .UserSection button {
+        font-size: 12px;
+        height: 30px;
+    }
+
+}

@@ -26,7 +26,7 @@ function Productos({Mensaje}) {
         }
         
         return (
-            <div>
+            <div className={styles.Contenedor}>
                 <h1 className={styles.Titulo}>{Mensaje}</h1>
                 <ul>
                     {productos.map((producto) => (

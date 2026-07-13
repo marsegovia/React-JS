@@ -1,11 +1,9 @@
 import './App.css';
 import { Layout } from './components/Layout/Layout';
 import { ItemListContainer } from './components/ItemListContainer/ItemListContainer';
-import Productos from './components/Productos/Productos';
 import { Routes, Route } from 'react-router-dom';
 import Inicio from './components/Inicio/Inicio';
 import Carrito from './components/Cart/Carrito';
-import VinilosImportados from './components/ProductosImportados/VinilosImportados';
 import ItemDetalle from './components/ProductosImportados/Detalle';
 import Gestion from './components/GestionProductos/GestionProductos';
 import Login from './components/Login/Login';

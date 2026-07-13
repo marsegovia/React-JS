@@ -109,3 +109,18 @@
     font-family: agatho;
     src: url('../../assets/Agatho_\ RegularCAPS.otf');
 }
+
+@media (max-width: 760px) {
+
+    .Card{
+        display: flex;
+        flex-direction: column;  
+        height: 430px;
+        flex-wrap: wrap;
+        width: 225px;
+    }
+
+    .Info h2{
+        font-size: 21px;
+    }
+}

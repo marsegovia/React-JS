@@ -1,0 +1,11 @@
+.Lista{
+    display: flex;
+    flex-direction: row;
+}
+
+@media (max-width: 760px) {
+    .Lista{
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+}

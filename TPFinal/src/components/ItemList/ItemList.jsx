@@ -1,8 +1,9 @@
 import { Item } from "../Item/item";
+import styles from "../ItemList/ItemList.module.css";
 
 export function ItemList({ productos }) {
             return (
-                <div style={{ display: 'flex', gap: '20px' }}>
+                <div className={styles.Lista} style={{ display: 'flex', gap: '20px' }}>
                     {productos.map(prod => (
                     <Item
     key={prod.id}
