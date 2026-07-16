@@ -18,7 +18,7 @@ export function Inicio(){
                 </div>
                     
                 <div className={styles.BotonInicial}>
-                    <button>Ver Catalogo</button>
+                    <Link to="/productos"><button>Ver Catalogo</button></Link>
                 </div>
             </div>
 

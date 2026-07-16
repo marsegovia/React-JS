@@ -7,6 +7,9 @@ export const CartProvider = ({ children }) => {
 
     const totalPrice = cart.reduce((acc, item) => acc + (item.precio * item.quantity), 0);
 
+    const clearCart = () => {
+        setCart([]);
+    };
     const addToCart = (product, quantity) => {
         // Lógica para agregar: si ya existe, sumamos cantidad; si no, lo añadimos
         const existingProduct = cart.find(item => item.id === product.id);
@@ -22,7 +25,7 @@ export const CartProvider = ({ children }) => {
     const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
 
     return (
-        <CartContext.Provider value={{ cart, addToCart, totalItems, totalPrice }}>
+        <CartContext.Provider value={{ cart, addToCart, totalItems, totalPrice, clearCart }}>
             {children}
         </CartContext.Provider>
     );

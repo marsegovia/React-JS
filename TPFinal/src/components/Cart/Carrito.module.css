@@ -21,6 +21,13 @@
     margin-left: 5px;
 }
 
+.VistaCarrito p{
+    color:white;
+    font-family: agatho;
+    text-align: center;
+    margin-bottom: 160px;
+}
+
 .ItemCarrito{
     margin: 10px;
     padding: 10px;
@@ -47,6 +54,24 @@
 .Carrito p {
     text-align: center;
     margin: 0;
+}
+
+.clear{
+    color: white;
+    margin-top: 20px;
+    font-family: agatho;
+    margin-bottom: 20px;
+    margin-left: 1100px;
+    font-size: 16px;
+    background-color: blueviolet;
+    border: 1px solid blueviolet;
+    cursor: pointer;
+    height: 40px;
+    width: 200px;
+}
+
+.ItemCarrito button:hover{
+    background-color: darkorchid;
 }
 
 @font-face {

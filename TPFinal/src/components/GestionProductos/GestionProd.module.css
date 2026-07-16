@@ -12,7 +12,7 @@
 .listaProductos li {
     display: grid;
     flex-direction: row;
-    grid-template-columns: 1200px 1fr 1fr;
+    grid-template-columns: 1000px 1fr 1fr;
     margin-bottom: 5px;
 }
 
@@ -45,4 +45,43 @@
     margin-left: 20px;
     font-size: 22px;
     color: white;
+}
+
+@media (max-width: 760px){
+ 
+    .listaProductos {
+        display: flex;
+        flex-direction: row;
+        font-family: agatho;
+        font-size: 12px;
+    }
+
+    .listaProductos li {
+        display: grid;
+        flex-direction: row;
+        grid-template-columns: 220px 1fr 1fr;
+        margin-bottom: 5px;
+        margin-left: -25px   
+    }
+
+    .barra{
+        width: 100%;
+    }
+
+    .Edit{
+        height: 18px;
+        font-size: 12px;
+    }
+
+    .Delete{
+        height: 18px;
+        font-size: 12px;
+    }
+
+    .Gestion h3{
+        font-family: wraith;
+        margin-left: 20px;
+        font-size: 22px;
+        color: white;
+    }
 }

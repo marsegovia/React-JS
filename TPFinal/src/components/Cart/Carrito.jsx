@@ -4,14 +4,14 @@ import styles from "../Cart/Carrito.module.css";
 
 export const Carrito = () => {
     // Consumimos el carrito directamente desde el contexto
-    const { cart,totalPrice } = useContext(CartContext);
+    const { cart,totalPrice, clearCart } = useContext(CartContext);
 
     return (
+        
         <div className={styles.VistaCarrito}>
             <h1>Tu Carrito</h1>
-            
             {cart.length === 0 ? (
-                <p>Tu carrito está vacío.</p>
+                <p>Tu carrito esta vacio.</p>
             ) : (
                 <div className={styles.ItemCarrito}>
                     {cart.map((item) => (
@@ -26,6 +26,7 @@ export const Carrito = () => {
                     <h2>Total  ${totalPrice}</h2>
                 </div>
             )}
+              {cart.length > 0 && (<button className={styles.clear} onClick={clearCart}>Vaciar Carrito</button>)}
         </div>
     );
 };
