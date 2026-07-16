@@ -56,6 +56,23 @@
     margin: 0;
 }
 
+.descuento{
+    border: 2px solid blueviolet;
+    margin-right: 20px;
+    margin-left: 15px;
+    height: 30px;
+    background-color: black;
+}
+
+.appCupon{
+    border: 1px solid blueviolet;
+    height: 32px;
+    background-color: blueviolet;
+    font-family: agatho;
+    color: white;
+    margin-bottom: 30px;
+}
+
 .clear{
     color: white;
     margin-top: 20px;

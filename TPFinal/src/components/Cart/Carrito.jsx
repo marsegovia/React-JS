@@ -1,10 +1,32 @@
 import { useContext } from "react";
 import { CartContext } from "../../Context/CartContext"; // Asegúrate de que la ruta sea correcta
 import styles from "../Cart/Carrito.module.css";
+import {useState} from "react";
 
 export const Carrito = () => {
     // Consumimos el carrito directamente desde el contexto
     const { cart,totalPrice, clearCart } = useContext(CartContext);
+    const [coupon, setCoupon] = useState("");
+    const [discount, setDiscount] = useState(0);
+
+    const applyCoupon = () => {
+    const value = coupons[coupon.toUpperCase()];
+
+        if (value) {
+            setDiscount(value);
+        } else {
+            alert("Cupón inválido");
+            setDiscount(0);
+        }
+    };
+
+    const finalPrice = totalPrice - (totalPrice * discount) / 100;
+
+    const coupons = {
+        VINILO10: 10,
+        METAL15: 15,
+        WELCOME20: 20,
+    };
 
     return (
         
@@ -26,7 +48,10 @@ export const Carrito = () => {
                     <h2>Total  ${totalPrice}</h2>
                 </div>
             )}
-              {cart.length > 0 && (<button className={styles.clear} onClick={clearCart}>Vaciar Carrito</button>)}
+            {cart.length > 0 && (<button className={styles.clear} onClick={clearCart}>Vaciar Carrito</button>)}
+            <input className={styles.descuento} type="text" placeholder="Código de descuento" value={coupon} 
+                onChange={(e) => setCoupon(e.target.value)}/>
+            <button className={styles.appCupon} onClick={applyCoupon}> Aplicar cupon </button>
         </div>
     );
 };
